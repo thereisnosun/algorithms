@@ -5,58 +5,12 @@
 
 namespace Algo
 {
-	template <class T>
-	void swap(T &t1, T &t2)
-	{
-		T tmp = t1;
-		t1 = t2;
-		t2 = tmp;
-	}
-
-	//TODO: first implement for containers
-	template <class Type>
-	Type* MergeSort(Type *arr, int iStart, int iEnd)
-	{
-		if (iEnd == 1 || iEnd <= iStart)
-			return arr;
-
-		int iMiddle = iEnd / 2;
-
-		Type *arr1 = MergeSort(arr, iStart, iMiddle);
-		Type *arr2 = MergeSort(arr, iMiddle + 1, iEnd);
-
-		return Merge(arr1, iStart, iMiddle, arr2, iMiddle + 1, iEnd);
-	}
-
-	//template <class Type>
-	//Type* Merge(Type *arr1, int iStart1, int iEnd1, Type *arr2, int iStart2, int iEnd2)
-	//{
-	//	Type *result = new Type[iEnd2];
-	//	int i = iStart1;
-	//	int j = iStart2;
-	//	for (int k = 0; k < iEnd2; ++k)
-	//	{
-	//		if (arr1[i] < arr2[j])
-	//		{
-	//			result[k] = arr1[j];
-	//			++j;
-	//		}
-	//		else
-	//		{
-	//			result[k] = arr2[i];
-	//			++i;
-	//		}
-	//	}
-	//	return result;
-	//}
-
-
+	//TODO: add version with iterators
 	template <class Type>
 	std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
 	{
 		if (vVector.size() == 1)
-			return std::make_unique<std::vector<Type>>(vVector);
-		//return std::shared_ptr<std::vector<Type>>(vVector);
+			return std::make_shared<std::vector<Type>>(vVector);
 
 		int iMiddle = vVector.size() / 2;
 
@@ -70,6 +24,7 @@ namespace Algo
 
 	}
 
+	//TODO: count number of split inversions
 	//TODO: difference between shared_ptr and unique_ptr
 	template <class Type>
 	std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
@@ -80,9 +35,7 @@ namespace Algo
 		auto Vec2Curr = pVec2->begin();
 		auto Vec2End = pVec2->end();
 
-		//std::shared_ptr<std::vector<Type>> resVector(new std::vector<Type>);
 		std::vector<Type> resVector;
-		//resVector.resize(pVec1->size() + pVec2->size());
 
 		while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
 		{
@@ -105,10 +58,9 @@ namespace Algo
 			resVector.push_back(*pLastIter);
 		}
 
-		return std::make_unique<std::vector<Type>>(resVector);
+		
+		return std::make_shared<std::vector<Type>>(resVector);
 	}
-
-
 
 	template <class Type>
 	void PrintVector(const std::vector<Type> &vVector)
@@ -121,13 +73,56 @@ namespace Algo
 		}
 	}
 
-	template <class Type>
-	void PrintArray(Type *arr, int iLength)
+	template <class T>
+	void MergeSort(T &first, T &last)
 	{
-		for (int i = 0; i < iLength; ++i)
-		{
-			std::cout << arr[i] << " ";
-		}
+		size_t uSize = std::distance(first, last);
+		if (uSize == 1)
+			return;
+
+		size_t uMiddle = uSize / 2;
+		T midIter = std::next(first, uMiddle);
+		MergeSort(first, midIter);
+		MergeSort(midIter, last);
+
+	    auto vRes = Merge(first, midIter, last);
+		std::move(vRes.begin(), vRes.end(), first);
 	}
+
+	template <class T>
+	std::vector<typename T::value_type> Merge(T &first, T& midIter, T &last)
+	{
+		T start1 = first;
+		T end1 = midIter;
+		T start2 = end1;
+		T end2 = last;
+
+		std::vector<typename T::value_type> vRes;
+		vRes.reserve(std::distance(first, last));
+		while (start1 != end1 && start2 != end2)
+		{
+			if (*start1 > *start2)
+			{
+				vRes.push_back(*start1);
+				++start1;
+			}
+			else
+			{
+				vRes.push_back(*start2);
+				++start2;
+			}
+		}
+
+		T pLastIter = start1 == end1 ? start2 : start1;
+		T pEndIter = start1 == end1 ? end2 : end1;
+		for (; pLastIter != pEndIter; ++pLastIter)
+		{
+			vRes.push_back(*pLastIter);
+		}
+
+		return std::move(vRes);
+	}
+	//TODO: count inversions
+	
 
 }
