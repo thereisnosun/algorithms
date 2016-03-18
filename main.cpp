@@ -11,7 +11,8 @@ int main(int argc, char *argv[])
 	std::vector<int> vVector(test, test + sizeof(test) / sizeof(int));
 
 	Algo::MergeSort(vVector.begin(), vVector.end());
-	Algo::PrintVector(vVector);
+	//Algo::PrintVector(vVector);
+	Algo::PrintContainer(vVector.begin(), vVector.end());
 
 	/*std::shared_ptr <std::vector<int>> pSortedVector = Algo::MergeSort(vVector);
 	Algo::PrintVector(*pSortedVector);*/

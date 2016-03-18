@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <iterator>
 
 namespace Algo
 {
@@ -124,6 +125,12 @@ namespace Algo
 	}
 	//TODO: count inversions
 	
+
+	template <class T>
+	void PrintContainer(const T &first, const T &last)
+	{
+		std::copy(first, last, std::ostream_iterator<typename T::value_type>(std::cout, " "));
+	}
 
 	template <class T>
 	void InsertionSort(T &first, T &last)
