@@ -125,4 +125,12 @@ namespace Algo
 	//TODO: count inversions
 	
 
+	template <class T>
+	void InsertionSort(T &first, T &last)
+	{
+		for (auto current = first; first != last; ++current)
+			std::rotate(std::upper_bound(first, current *current), current, std::next(current));
+	}
+
+
 }
