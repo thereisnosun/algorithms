@@ -6,7 +6,6 @@
 
 namespace Algo
 {
-	//TODO: add version with iterators
 	template <class Type>
 	std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
 	{
@@ -25,7 +24,6 @@ namespace Algo
 
 	}
 
-	//TODO: count number of split inversions
 	//TODO: difference between shared_ptr and unique_ptr
 	template <class Type>
 	std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
@@ -75,56 +73,11 @@ namespace Algo
 	}
 
 	template <class T>
-	void MergeSort(T &first, T &last)
+	void InsertionSort(T &first, T &last)
 	{
-		size_t uSize = std::distance(first, last);
-		if (uSize == 1)
-			return;
-
-		size_t uMiddle = uSize / 2;
-		T midIter = std::next(first, uMiddle);
-		MergeSort(first, midIter);
-		MergeSort(midIter, last);
-
-	    auto vRes = Merge(first, midIter, last);
-		std::move(vRes.begin(), vRes.end(), first);
+		for (auto current = first; first != last; ++current)
+			std::rotate(std::upper_bound(first, current *current), current, std::next(current));
 	}
-
-	template <class T>
-	std::vector<typename T::value_type> Merge(T &first, T& midIter, T &last)
-	{
-		T start1 = first;
-		T end1 = midIter;
-		T start2 = end1;
-		T end2 = last;
-
-		std::vector<typename T::value_type> vRes;
-		vRes.reserve(std::distance(first, last));
-		while (start1 != end1 && start2 != end2)
-		{
-			if (*start1 > *start2)
-			{
-				vRes.push_back(*start1);
-				++start1;
-			}
-			else
-			{
-				vRes.push_back(*start2);
-				++start2;
-			}
-		}
-
-		T pLastIter = start1 == end1 ? start2 : start1;
-		T pEndIter = start1 == end1 ? end2 : end1;
-		for (; pLastIter != pEndIter; ++pLastIter)
-		{
-			vRes.push_back(*pLastIter);
-		}
-
-		return std::move(vRes);
-	}
-	//TODO: count inversions
-	
 
 	template <class T>
 	void PrintContainer(const T &first, const T &last)
@@ -133,10 +86,59 @@ namespace Algo
 	}
 
 	template <class T>
-	void InsertionSort(T &first, T &last)
+	int MergeSort(T &first, T &last)
 	{
-		for (auto current = first; first != last; ++current)
-			std::rotate(std::upper_bound(first, current *current), current, std::next(current));
+		size_t uSize = std::distance(first, last);
+		if (uSize == 1)
+			return 0;
+
+		size_t uMiddle = uSize / 2;
+		T midIter = std::next(first, uMiddle);
+		int firstHalf = MergeSort(first, midIter);
+		int secondHalf = MergeSort(midIter, last);
+
+		int iSplitInversion = 0;
+		auto vRes = Merge(first, midIter, last, iSplitInversion);
+		std::move(vRes.begin(), vRes.end(), first);
+
+		return (iSplitInversion + firstHalf + secondHalf);
+	}
+
+	template <class T>
+	std::vector<typename T::value_type> Merge(T &first, T& midIter, T &last, int &iSplitInversion)
+	{
+		T start1 = first;
+		T end1 = midIter;
+		T start2 = end1;
+		T end2 = last;
+
+		std::vector<typename T::value_type> vRes;
+		vRes.reserve(std::distance(first, last));
+		auto midElement = *midIter;
+		while (start1 != end1 && start2 != end2)
+		{
+			if (*start1 <= *start2)
+			{
+				vRes.push_back(*start1);
+				++start1;
+			}
+			else
+			{
+				vRes.push_back(*start2);
+				iSplitInversion += std::distance(start1, end1);
+				++start2;
+			}
+		}
+
+		T pLastIter = start1 == end1 ? start2 : start1;
+		T pEndIter = start1 == end1 ? end2 : end1;
+
+		for (; pLastIter != pEndIter; ++pLastIter)
+		{
+			vRes.push_back(*pLastIter);
+		}
+
+		return std::move(vRes);
 	}
 
 
