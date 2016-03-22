@@ -125,7 +125,7 @@ namespace Algo
 			else
 			{
 				vRes.push_back(*start2);
-				iSplitInversion += std::distance(start1, end1);
+				iSplitInversion += static_cast<int>(std::distance(start1, end1));
 				++start2;
 			}
 		}
@@ -139,6 +139,19 @@ namespace Algo
 		}
 
 		return std::move(vRes);
+	}
+
+	//TODO: add ability to piggybacking by calling some custom function
+	//TODO: closest split pair
+
+	template <class T>
+	using VectorPair = std::vector<std::pair<typename T::value_type, typename T::value_type>>;
+
+	template <class T>
+	VectorPair<T> FindClosestPair(T &first, T &last)
+	{
+
+		return nullptr;
 	}
 
 
