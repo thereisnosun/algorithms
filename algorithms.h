@@ -6,72 +6,52 @@
 
 namespace Algo
 {
-	template <class Type>
-	std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
-	{
-		if (vVector.size() == 1)
-			return std::make_shared<std::vector<Type>>(vVector);
+    template <class T>
+    void QuickSort(T &first, T &last)
+    {
+        T oldFirst = first;
+        T oldLast = last;
+        Partition(first, last);
+        
+        size_t leftInd = std::distance(oldFirst, first);
+        size_t rightInd = std::distance(last, oldLast);
+        size_t index = leftInd;
+        if (leftInd < index - 1)
+        {
+            QuickSort(oldFirst, std::next(oldFirst, leftInd));
+        }
+        if (index < rightInd)
+        {
+            QuickSort(std::prev(oldLast, rightInd), oldLast);
+        }
+        
+    }
 
-		int iMiddle = vVector.size() / 2;
+    template <class T>
+    void Partition(T &first, T &last)
+    {
+        size_t uSize = std::distance(first, last);
+        if (uSize == 1)
+            return;
 
-		std::vector<Type> vVec1(vVector.begin(), vVector.begin() + iMiddle);
-		std::vector<Type> vVec2(vVector.begin() + iMiddle, vVector.end());
+        size_t uMiddle = uSize / 2;
+        T pivot = std::next(first, uMiddle);
 
-		std::shared_ptr<std::vector<Type>> vVector1 = MergeSort(vVec1);
-		std::shared_ptr<std::vector<Type>> vVector2 = MergeSort(vVec2);
+        while (first != last)
+        {
+            while (*first < *pivot) ++first;
+            while (*last > *pivot) ++second;
+            if (first != last)
+            {
+                std::swap(*first, *last);
+                ++first;
+                --last;
+            }
+        }
 
-		return  Merge(vVector1, vVector2);
 
-	}
-
-	//TODO: difference between shared_ptr and unique_ptr
-	template <class Type>
-	std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
-	{
-		auto Vec1Curr = pVec1->begin();
-		auto Vec1End = pVec1->end();
-
-		auto Vec2Curr = pVec2->begin();
-		auto Vec2End = pVec2->end();
-
-		std::vector<Type> resVector;
-
-		while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
-		{
-			if (*Vec1Curr > *Vec2Curr)
-			{
-				resVector.push_back(*Vec1Curr);
-				++Vec1Curr;
-			}
-			else
-			{
-				resVector.push_back(*Vec2Curr);
-				++Vec2Curr;
-			}
-		}
-
-		auto pLastIter = Vec1Curr == Vec1End ? Vec2Curr : Vec1Curr;
-		auto pEndIter = Vec1Curr == Vec1End ? Vec2End : Vec1End;
-		for (; pLastIter != pEndIter; ++pLastIter)
-		{
-			resVector.push_back(*pLastIter);
-		}
-
-		
-		return std::make_shared<std::vector<Type>>(resVector);
-	}
-
-	template <class Type>
-	void PrintVector(const std::vector<Type> &vVector)
-	{
-		auto pCurr = vVector.begin();
-		const auto pEnd = vVector.end();
-		for (; pCurr != pEnd; ++pCurr)
-		{
-			std::cout << *pCurr << " ";
-		}
-	}
-
+    }
+    
 	template <class T>
 	void InsertionSort(T &first, T &last)
 	{
@@ -80,9 +60,9 @@ namespace Algo
 	}
 
 	template <class T>
-	void PrintContainer(const T &first, const T &last)
+	void PrintContainer(const T &first, const T &last, const std::string &sSeparator = " ")
 	{
-		std::copy(first, last, std::ostream_iterator<typename T::value_type>(std::cout, " "));
+		std::copy(first, last, std::ostream_iterator<typename T::value_type>(std::cout, sSeparator.c_str()));
 	}
 
 	template <class T>
@@ -143,7 +123,6 @@ namespace Algo
 
 	//TODO: add ability to piggybacking by calling some custom function
 	//TODO: closest split pair
-
 	template <class T>
 	using VectorPair = std::vector<std::pair<typename T::value_type, typename T::value_type>>;
 
@@ -153,6 +132,72 @@ namespace Algo
 
 		return nullptr;
 	}
+
+    template <class Type>
+    std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
+    {
+        if (vVector.size() == 1)
+            return std::make_shared<std::vector<Type>>(vVector);
+
+        int iMiddle = vVector.size() / 2;
+
+        std::vector<Type> vVec1(vVector.begin(), vVector.begin() + iMiddle);
+        std::vector<Type> vVec2(vVector.begin() + iMiddle, vVector.end());
+
+        std::shared_ptr<std::vector<Type>> vVector1 = MergeSort(vVec1);
+        std::shared_ptr<std::vector<Type>> vVector2 = MergeSort(vVec2);
+
+        return  Merge(vVector1, vVector2);
+
+    }
+
+    //TODO: difference between shared_ptr and unique_ptr
+    template <class Type>
+    std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
+    {
+        auto Vec1Curr = pVec1->begin();
+        auto Vec1End = pVec1->end();
+
+        auto Vec2Curr = pVec2->begin();
+        auto Vec2End = pVec2->end();
+
+        std::vector<Type> resVector;
+
+        while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
+        {
+            if (*Vec1Curr > *Vec2Curr)
+            {
+                resVector.push_back(*Vec1Curr);
+                ++Vec1Curr;
+            }
+            else
+            {
+                resVector.push_back(*Vec2Curr);
+                ++Vec2Curr;
+            }
+        }
+
+        auto pLastIter = Vec1Curr == Vec1End ? Vec2Curr : Vec1Curr;
+        auto pEndIter = Vec1Curr == Vec1End ? Vec2End : Vec1End;
+        for (; pLastIter != pEndIter; ++pLastIter)
+        {
+            resVector.push_back(*pLastIter);
+        }
+
+
+        return std::make_shared<std::vector<Type>>(resVector);
+    }
+
+    template <class Type>
+    void PrintVector(const std::vector<Type> &vVector)
+    {
+        auto pCurr = vVector.begin();
+        const auto pEnd = vVector.end();
+        for (; pCurr != pEnd; ++pCurr)
+        {
+            std::cout << *pCurr << " ";
+        }
+    }
 
 
 }
