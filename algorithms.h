@@ -6,49 +6,74 @@
 
 namespace Algo
 {
+    //TODO: fix issue with duplicate numbers
     template <class T>
     void QuickSort(T &first, T &last)
     {
+        T invalidIt = last;
+        QuickSort(first, last, 0, std::distance(first, last) - 1, invalidIt);
+    }
+
+    template <class T>
+    void QuickSort(T &first, T &last, int left, int right, T invalidIt)
+    {
         T oldFirst = first;
         T oldLast = last;
-        Partition(first, last);
+        int uSize = std::distance(first, last);
+        if (uSize <= 1)
+            return;
+
+        int index = Partition(first, last, left, right, invalidIt);
         
-        size_t leftInd = std::distance(oldFirst, first);
-        size_t rightInd = std::distance(last, oldLast);
-        size_t index = leftInd;
-        if (leftInd < index - 1)
+        if (left < index-1)
         {
-            QuickSort(oldFirst, std::next(oldFirst, leftInd));
+            QuickSort(oldFirst, std::next(oldFirst, index - 1), left, index -1, invalidIt);
         }
-        if (index < rightInd)
+        if (index < right)
         {
-            QuickSort(std::prev(oldLast, rightInd), oldLast);
+            QuickSort(std::next(oldFirst, index), oldLast, index, right, invalidIt);
+            //QuickSort(std::next(oldFirst, index), std::next(oldFirst, right), index, right, invalidIt);
         }
         
     }
 
     template <class T>
-    void Partition(T &first, T &last)
+    int Partition(T &first, T &last, int left, int right, T invalidIt)
     {
-        size_t uSize = std::distance(first, last);
-        if (uSize == 1)
-            return;
-
-        size_t uMiddle = uSize / 2;
+        //int uSize = std::distance(first, last);
+        //int uMiddle = uSize / 2;
+        int uMiddle = left + (right - left) / 2;
         T pivot = std::next(first, uMiddle);
 
-        while (first != last)
+        T oldFirst = first;
+        T oldLast = last;
+        
+        int i = left, j = right;
+        if (last == invalidIt)
+            --last;
+
+        while (i <= j)
         {
-            while (*first < *pivot) ++first;
-            while (*last > *pivot) ++second;
-            if (first != last)
+            while (*first < *pivot)
+            {
+                ++first; 
+                ++i;
+            }
+            while (*last > *pivot)
+            {
+                --last;
+                --j;
+            }
+            if (i <= j)
             {
                 std::swap(*first, *last);
                 ++first;
                 --last;
+                ++i;
+                --j;
             }
         }
-
+        return i;
 
     }
     
