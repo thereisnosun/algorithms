@@ -8,10 +8,10 @@ int main(int argc, char *argv[])
 
 	std::vector<int> vVector(test, test + sizeof(test) / sizeof(int));
 
-	int iSplit = Algo::MergeSort(vVector.begin(), vVector.end());
-	std::cout << "Split inversions - " << iSplit << std::endl;
+	//int iSplit = Algo::MergeSort(vVector.begin(), vVector.end());
+	//std::cout << "Split inversions - " << iSplit << std::endl;
 
-    //Algo::QuickSort(vVector.begin(), vVector.end());
+    Algo::QuickSort(vVector.begin(), vVector.end());
 	Algo::PrintContainer(vVector.begin(), vVector.end());
 
 	return 0;

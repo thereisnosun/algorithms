@@ -49,7 +49,6 @@ namespace Algo
 
             }
         }
-
        
         if (left < j)
         {
@@ -62,41 +61,6 @@ namespace Algo
         
     }
 
-    template <class T>
-    int Partition(T &first, T &last, int left, int right, T invalidIt, typename T::value_type realPivot)
-    {
-        int i = left, j = right;
-        if (last == invalidIt)
-            --last;
-
-        while (i <= j)
-        {
-            while (*first < realPivot)
-            {
-                ++first; 
-                ++i;
-            }
-            while (*last > realPivot)
-            {
-                --last;
-                --j;
-            }
-            if (i <= j)
-            {
-                std::swap(*first, *last);
-                ++i;
-                --j;
-                ++first;
-                if (j > 0)
-                    --last;
-                
-            }
-        }
-
-        std::cout << "Pivot" << realPivot << " i - " << i << " right - " << right << " left - " << left << " j - " << j << "\n";
-        return i;
-
-    }
     
 	template <class T>
 	void InsertionSort(T &first, T &last)
