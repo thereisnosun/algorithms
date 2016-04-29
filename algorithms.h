@@ -6,60 +6,34 @@
 
 namespace Algo
 {
-    //TODO: fix issue with duplicate numbers
     template <class T>
     void QuickSort(T &first, T &last)
     {
+        T oldFirst = first;
         T invalidIt = last;
-        QuickSort(first, last, 0, std::distance(first, last) - 1, invalidIt);
+        QuickSort(first, last, 0, std::distance(first, last) - 1, oldFirst, invalidIt);
     }
 
     template <class T>
-    void QuickSort(T &first, T &last, int left, int right, T invalidIt)
+    void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
     {
-        T oldFirst = first;
-        T oldLast = last;
-        int uSize = std::distance(first, last);
-        if (uSize <= 1)
-            return;
+        int uMiddle = (right + left) / 2; 
+        T pivot = std::next(oldFirst, uMiddle);
+        typename T::value_type realPivot = *pivot;
 
-        int index = Partition(first, last, left, right, invalidIt);
-        
-        if (left < index-1)
-        {
-            QuickSort(oldFirst, std::next(oldFirst, index - 1), left, index -1, invalidIt);
-        }
-        if (index < right)
-        {
-            QuickSort(std::next(oldFirst, index), oldLast, index, right, invalidIt);
-            //QuickSort(std::next(oldFirst, index), std::next(oldFirst, right), index, right, invalidIt);
-        }
-        
-    }
 
-    template <class T>
-    int Partition(T &first, T &last, int left, int right, T invalidIt)
-    {
-        //int uSize = std::distance(first, last);
-        //int uMiddle = uSize / 2;
-        int uMiddle = left + (right - left) / 2;
-        T pivot = std::next(first, uMiddle);
-
-        T oldFirst = first;
-        T oldLast = last;
-        
         int i = left, j = right;
         if (last == invalidIt)
             --last;
 
         while (i <= j)
         {
-            while (*first < *pivot)
+            while (*first < realPivot)
             {
-                ++first; 
+                ++first;
                 ++i;
             }
-            while (*last > *pivot)
+            while (*last > realPivot)
             {
                 --last;
                 --j;
@@ -67,12 +41,59 @@ namespace Algo
             if (i <= j)
             {
                 std::swap(*first, *last);
-                ++first;
-                --last;
                 ++i;
                 --j;
+                ++first;
+                if (j >= 0)
+                    --last;
+
             }
         }
+
+       
+        if (left < j)
+        {
+            QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt);
+        }
+        if (i < right)
+        {
+            QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt);
+        }
+        
+    }
+
+    template <class T>
+    int Partition(T &first, T &last, int left, int right, T invalidIt, typename T::value_type realPivot)
+    {
+        int i = left, j = right;
+        if (last == invalidIt)
+            --last;
+
+        while (i <= j)
+        {
+            while (*first < realPivot)
+            {
+                ++first; 
+                ++i;
+            }
+            while (*last > realPivot)
+            {
+                --last;
+                --j;
+            }
+            if (i <= j)
+            {
+                std::swap(*first, *last);
+                ++i;
+                --j;
+                ++first;
+                if (j > 0)
+                    --last;
+                
+            }
+        }
+
+        std::cout << "Pivot" << realPivot << " i - " << i << " right - " << right << " left - " << left << " j - " << j << "\n";
         return i;
 
     }
