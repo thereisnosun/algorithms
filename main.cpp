@@ -1,5 +1,6 @@
 #include <iostream>
 #include "algorithms.h"
+#include "sort.h"
 
 
 int main(int argc, char *argv[])
@@ -8,10 +9,10 @@ int main(int argc, char *argv[])
 
 	std::vector<int> vVector(test, test + sizeof(test) / sizeof(int));
 
-	//int iSplit = Algo::MergeSort(vVector.begin(), vVector.end());
+	//int iSplit = Sort::MergeSort(vVector.begin(), vVector.end());
 	//std::cout << "Split inversions - " << iSplit << std::endl;
 
-    Algo::QuickSort(vVector.begin(), vVector.end());
+    Sort::QuickSort(vVector.begin(), vVector.end());
 	Algo::PrintContainer(vVector.begin(), vVector.end());
 
 	return 0;
