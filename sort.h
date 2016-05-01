@@ -45,7 +45,6 @@ namespace Sort
                 ++first;
                 if (j >= 0)
                     --last;
-
             }
         }
        
