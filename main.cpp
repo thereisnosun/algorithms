@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 	//std::cout << "Split inversions - " << iSplit << std::endl;
 
     Sort::QuickSort(vVector.begin(), vVector.end());
+
 	Algo::PrintContainer(vVector.begin(), vVector.end());
 
 	return 0;
