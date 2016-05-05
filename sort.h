@@ -5,70 +5,22 @@
 
 namespace Sort
 {
-	 template <class T>
+    template <class T>
+    void InsertionSort(T &first, T &last)
+    {
+        for (auto current = first; first != last; ++current)
+            std::rotate(std::upper_bound(first, current *current), current, std::next(current));
+    }
+
+    template <class T>
     void QuickSort(T &first, T &last)
     {
         T oldFirst = first;
         T invalidIt = last;
-        QuickSort(first, last, 0, std::distance(first, last) - 1, oldFirst, invalidIt);
+        Implementation::QuickSort(first, last, 0, static_cast<int>(std::distance(first, last) - 1), oldFirst, invalidIt);
     }
 
-    template <class T>
-    void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
-    {
-        int uMiddle = (right + left) / 2; 
-        T pivot = std::next(oldFirst, uMiddle);
-        typename T::value_type realPivot = *pivot;
-
-
-        int i = left, j = right;
-        if (last == invalidIt)
-            --last;
-
-        while (i <= j)
-        {
-            while (*first < realPivot)
-            {
-                ++first;
-                ++i;
-            }
-            while (*last > realPivot)
-            {
-                --last;
-                --j;
-            }
-            if (i <= j)
-            {
-                std::swap(*first, *last);
-                ++i;
-                --j;
-                ++first;
-                if (j >= 0)
-                    --last;
-            }
-        }
-       
-        if (left < j)
-        {
-            QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt);
-        }
-        if (i < right)
-        {
-            QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt);
-        }
-        
-    }
-
-    
-	template <class T>
-	void InsertionSort(T &first, T &last)
-	{
-		for (auto current = first; first != last; ++current)
-			std::rotate(std::upper_bound(first, current *current), current, std::next(current));
-	}
-
-
-	  template <class Type>
+	template <class Type>
     std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
     {
         if (vVector.size() == 1)
@@ -82,45 +34,8 @@ namespace Sort
         std::shared_ptr<std::vector<Type>> vVector1 = MergeSort(vVec1);
         std::shared_ptr<std::vector<Type>> vVector2 = MergeSort(vVec2);
 
-        return  Merge(vVector1, vVector2);
+        return  Implementation::Merge(vVector1, vVector2);
 
-    }
-
-    //TODO: difference between shared_ptr and unique_ptr
-    template <class Type>
-    std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
-    {
-        auto Vec1Curr = pVec1->begin();
-        auto Vec1End = pVec1->end();
-
-        auto Vec2Curr = pVec2->begin();
-        auto Vec2End = pVec2->end();
-
-        std::vector<Type> resVector;
-
-        while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
-        {
-            if (*Vec1Curr > *Vec2Curr)
-            {
-                resVector.push_back(*Vec1Curr);
-                ++Vec1Curr;
-            }
-            else
-            {
-                resVector.push_back(*Vec2Curr);
-                ++Vec2Curr;
-            }
-        }
-
-        auto pLastIter = Vec1Curr == Vec1End ? Vec2Curr : Vec1Curr;
-        auto pEndIter = Vec1Curr == Vec1End ? Vec2End : Vec1End;
-        for (; pLastIter != pEndIter; ++pLastIter)
-        {
-            resVector.push_back(*pLastIter);
-        }
-
-
-        return std::make_shared<std::vector<Type>>(resVector);
     }
 
 	template <class T>
@@ -136,46 +51,141 @@ namespace Sort
 		int secondHalf = MergeSort(midIter, last);
 
 		int iSplitInversion = 0;
-		auto vRes = Merge(first, midIter, last, iSplitInversion);
+		auto vRes = Implementation::Merge(first, midIter, last, iSplitInversion);
 		std::move(vRes.begin(), vRes.end(), first);
 
 		return (iSplitInversion + firstHalf + secondHalf);
 	}
 
-	template <class T>
-	std::vector<typename T::value_type> Merge(T &first, T& midIter, T &last, int &iSplitInversion)
-	{
-		T start1 = first;
-		T end1 = midIter;
-		T start2 = end1;
-		T end2 = last;
+	
 
-		std::vector<typename T::value_type> vRes;
-		vRes.reserve(std::distance(first, last));
-		auto midElement = *midIter;
-		while (start1 != end1 && start2 != end2)
-		{
-			if (*start1 <= *start2)
-			{
-				vRes.push_back(*start1);
-				++start1;
-			}
-			else
-			{
-				vRes.push_back(*start2);
-				iSplitInversion += static_cast<int>(std::distance(start1, end1));
-				++start2;
-			}
-		}
+    class Implementation
+    {
+    public:
+        template <class T> friend int MergeSort(T &first, T &last);
+        template <class Type> friend std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector);
+        template <class T> friend void QuickSort(T &first, T &last);
+    private:
+        template <class T>
+        static std::vector<typename T::value_type> Merge(T &first, T& midIter, T &last, int &iSplitInversion)
+        {
+            T start1 = first;
+            T end1 = midIter;
+            T start2 = end1;
+            T end2 = last;
 
-		T pLastIter = start1 == end1 ? start2 : start1;
-		T pEndIter = start1 == end1 ? end2 : end1;
+            std::vector<typename T::value_type> vRes;
+            vRes.reserve(std::distance(first, last));
+            auto midElement = *midIter;
+            while (start1 != end1 && start2 != end2)
+            {
+                if (*start1 <= *start2)
+                {
+                    vRes.push_back(*start1);
+                    ++start1;
+                }
+                else
+                {
+                    vRes.push_back(*start2);
+                    iSplitInversion += static_cast<int>(std::distance(start1, end1));
+                    ++start2;
+                }
+            }
 
-		for (; pLastIter != pEndIter; ++pLastIter)
-		{
-			vRes.push_back(*pLastIter);
-		}
+            T pLastIter = start1 == end1 ? start2 : start1;
+            T pEndIter = start1 == end1 ? end2 : end1;
 
-		return std::move(vRes);
-	}
+            for (; pLastIter != pEndIter; ++pLastIter)
+            {
+                vRes.push_back(*pLastIter);
+            }
+
+            return std::move(vRes);
+        }
+
+        //TODO: difference between shared_ptr and unique_ptr
+        template <class Type>
+        static std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
+        {
+            auto Vec1Curr = pVec1->begin();
+            auto Vec1End = pVec1->end();
+
+            auto Vec2Curr = pVec2->begin();
+            auto Vec2End = pVec2->end();
+
+            std::vector<Type> resVector;
+
+            while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
+            {
+                if (*Vec1Curr > *Vec2Curr)
+                {
+                    resVector.push_back(*Vec1Curr);
+                    ++Vec1Curr;
+                }
+                else
+                {
+                    resVector.push_back(*Vec2Curr);
+                    ++Vec2Curr;
+                }
+            }
+
+            auto pLastIter = Vec1Curr == Vec1End ? Vec2Curr : Vec1Curr;
+            auto pEndIter = Vec1Curr == Vec1End ? Vec2End : Vec1End;
+            for (; pLastIter != pEndIter; ++pLastIter)
+            {
+                resVector.push_back(*pLastIter);
+            }
+
+
+            return std::make_shared<std::vector<Type>>(resVector);
+        }
+
+
+        template <class T>
+        static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
+        {
+            int uMiddle = (right + left) / 2;
+            T pivot = std::next(oldFirst, uMiddle);
+            typename T::value_type realPivot = *pivot;
+
+
+            int i = left, j = right;
+            if (last == invalidIt)
+                --last;
+
+            while (i <= j)
+            {
+                while (*first < realPivot)
+                {
+                    ++first;
+                    ++i;
+                }
+                while (*last > realPivot)
+                {
+                    --last;
+                    --j;
+                }
+                if (i <= j)
+                {
+                    std::swap(*first, *last);
+                    ++i;
+                    --j;
+                    ++first;
+                    if (j >= 0)
+                        --last;
+                }
+            }
+
+            if (left < j)
+            {
+                QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt);
+            }
+            if (i < right)
+            {
+                QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt);
+            }
+
+        }
+
+    };
 }
