@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <iterator>
+#include <functional>
 
 namespace Sort
 {
@@ -17,7 +18,20 @@ namespace Sort
     {
         T oldFirst = first;
         T invalidIt = last;
-        Implementation::QuickSort(first, last, 0, static_cast<int>(std::distance(first, last) - 1), oldFirst, invalidIt);
+        Implementation::QuickSort(first, last, 0, static_cast<int>(std::distance(first, last) - 1), oldFirst, invalidIt,
+                                  [](const typename T::value_type &first, const typename T::value_type &second)-> bool
+        {
+            if (first > second)
+                return false;
+            else
+                return true;
+        });
+    }
+
+    template <class T>
+    void QuickSort(T &first, T &last, std::function<bool(const typename T::value_type &first, const typename T::value_type &second)> comparator)
+    {
+
     }
 
 	template <class Type>
@@ -141,8 +155,10 @@ namespace Sort
         }
 
 
+        //TODO: refactor - reduce arguments number
         template <class T>
-        static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
+        static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt, 
+                              std::function<bool(const typename T::value_type &first, const typename T::value_type &second)> comparator)
         {
             int uMiddle = (right + left) / 2;
             T pivot = std::next(oldFirst, uMiddle);
@@ -178,11 +194,11 @@ namespace Sort
 
             if (left < j)
             {
-                QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt);
-            }
+                QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt, comparator);
+            } 
             if (i < right)
             {
-                QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt);
+                QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt, comparator);
             }
 
         }
