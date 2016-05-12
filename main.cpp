@@ -17,13 +17,9 @@ int main(int argc, char *argv[])
 
 	Algo::PrintContainer(vVector.begin(), vVector.end());
 
-
-    std::vector<int> v1 = { 0, 1, 0 };
-    std::vector<int> v2 = { 1, 0, 1 };
-    std::vector<int> v3 = { 0, 1, 0 };
-
-    std::vector<std::vector<int>> matrix = { v1, v2, v3 };
-    Graph graph(matrix);
+    Graph graph({ { 0, 1, 0 },
+                  { 1, 0, 1 },
+                  { 0, 1, 0 } });
 
 	return 0;
 }

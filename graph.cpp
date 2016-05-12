@@ -6,7 +6,6 @@ Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix)
     BuildFromMatrix(vAdjMatrix);
 }
 
-//TODO: pair comparator ?
 //first case
 //representation:
 //0 1 0
