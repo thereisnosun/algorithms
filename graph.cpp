@@ -4,7 +4,37 @@
 Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
     m_iVertexNum(0)
 {
-    BuildFromMatrix(vAdjMatrix);
+	GraphRepresentation repr = CheckRepresentation(vAdjMatrix);
+	if (repr == GraphRepresentation::MATRIX)
+	{
+		BuildFromMatrix(vAdjMatrix);
+	}
+	else if (repr == GraphRepresentation::VECTOR_LIST)
+	{
+		BuildFromVectorList(vAdjMatrix);
+	}
+	else
+	{
+		//TODO: throw exception
+	}
+    
+}
+
+GraphRepresentation Graph::CheckRepresentation(const std::vector<std::vector<int>> &vAdjMatrix) const
+{
+	GraphRepresentation graphRepr = GraphRepresentation::MATRIX;
+	size_t uMatrixHeight = vAdjMatrix.size();
+
+	for( auto itCurrent = vAdjMatrix.begin(); itCurrent != vAdjMatrix.end(); ++itCurrent)
+	{
+		if (uMatrixHeight != itCurrent->size())
+		{
+			graphRepr = GraphRepresentation::VECTOR_LIST;
+			break;
+		}
+	}
+
+	return std::move(graphRepr);
 }
 
 //first case
@@ -34,7 +64,6 @@ void Graph::BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix)
         }
 
         ++glVertex;
-        ++m_iVertexNum;
     }
 }
 
@@ -42,6 +71,23 @@ void Graph::BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix)
 //2
 //1, 3
 //2
+
+void Graph::BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix)
+{
+	auto itCurrent = vAdjMatrix.begin();
+	auto itEnd = vAdjMatrix.end();
+	int glVertex = 1;
+	for (; itCurrent != itEnd; ++itCurrent)
+	{
+		auto vAdjVector = *itCurrent;
+		std::for_each(vAdjVector.begin(), vAdjVector.end(), [this, glVertex](int iVertex)->void
+		{
+			AddUniquePair(glVertex, iVertex);
+		});
+
+		++glVertex;
+	}
+}
 
 
 void Graph::AddEdge(const std::pair<int, int> &edge)
@@ -55,12 +101,11 @@ void Graph::AddVertex(const std::vector<int> &vVertex)
     if (vVertex.empty())
         return;
 
-    ++m_iVertexNum;
     std::for_each(vVertex.begin(), vVertex.end(), [this](int iVertex)->void
     {
-        AddUniquePair(m_iVertexNum, iVertex);
+        AddUniquePair(m_iVertexNum + 1, iVertex);
     });
-    
+
 }
 
 void Graph::AddUniquePair(int m, int n)
@@ -82,6 +127,7 @@ void Graph::AddUniquePair(int m, int n)
     if (itFind == std::end(m_vAdjacencyVector))
     {
         m_vAdjacencyVector.push_back(std::make_pair(m, n));
+		++m_iVertexNum;
     }
 }
 

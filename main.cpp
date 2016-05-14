@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
 
 	Algo::PrintContainer(vVector.begin(), vVector.end());
 
+
+	//TODO: v2012 does not support init list;
     Graph graph({ { 0, 1, 0 },
                   { 1, 0, 1 },
                   { 0, 1, 0 } });
