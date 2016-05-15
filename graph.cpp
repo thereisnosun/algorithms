@@ -71,7 +71,6 @@ void Graph::BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix)
 //2
 //1, 3
 //2
-
 void Graph::BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix)
 {
 	auto itCurrent = vAdjMatrix.begin();

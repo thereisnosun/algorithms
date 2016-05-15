@@ -18,14 +18,7 @@ namespace Sort
     {
         T oldFirst = first;
         T invalidIt = last;
-        Implementation::QuickSort(first, last, 0, static_cast<int>(std::distance(first, last) - 1), oldFirst, invalidIt,
-                                  [](const typename T::value_type &first, const typename T::value_type &second)-> bool
-        {
-            if (first > second)
-                return false;
-            else
-                return true;
-        });
+        Implementation::QuickSort(first, last, 0, static_cast<int>(std::distance(first, last) - 1), oldFirst, invalidIt);
     }
 
     template <class T>
@@ -157,8 +150,7 @@ namespace Sort
 
         //TODO: refactor - reduce arguments number
         template <class T>
-        static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt, 
-                              std::function<bool(const typename T::value_type &first, const typename T::value_type &second)> comparator)
+        static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
         {
             int uMiddle = (right + left) / 2;
             T pivot = std::next(oldFirst, uMiddle);
@@ -194,11 +186,11 @@ namespace Sort
 
             if (left < j)
             {
-                QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt, comparator);
+                QuickSort(std::next(oldFirst, left), std::next(oldFirst, j), left, j, oldFirst, invalidIt);
             } 
             if (i < right)
             {
-                QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt, comparator);
+                QuickSort(std::next(oldFirst, i), std::next(oldFirst, right), i, right, oldFirst, invalidIt);
             }
 
         }
