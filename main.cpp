@@ -19,9 +19,17 @@ int main(int argc, char *argv[])
 
 
 	//TODO: v2012 does not support init list;
+#ifdef  _MSC_PLATFORM_TOOLSET_v140
     Graph graph({ { 0, 1, 0 },
                   { 1, 0, 1 },
                   { 0, 1, 0 } });
+#else
+/*      { 0, 1, 0 },
+        { 1, 0, 1 },
+        { 0, 1, 0 }
+*/
+    //TODO: init without initializer list
+#endif
 
 	return 0;
 }
