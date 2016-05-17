@@ -107,6 +107,8 @@ void Graph::AddVertex(const std::vector<int> &vVertex)
 
 }
 
+
+//FIXME: graph CAN have duplicate edges!
 void Graph::AddUniquePair(int m, int n)
 {
     auto itFind = std::find_if(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(), 
@@ -130,4 +132,13 @@ void Graph::AddUniquePair(int m, int n)
     }
 }
 
+std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
+{
+    std::vector<std::pair<int, int>> vMinimumCut;
+    std::for_each(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(),[&vMinimumCut](const std::pair<int, int> &edge)->void
+    {
 
+    });
+
+    return std::move(vMinimumCut)
+}
