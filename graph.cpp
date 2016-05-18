@@ -140,5 +140,5 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
 
     });
 
-    return std::move(vMinimumCut)
+    return std::move(vMinimumCut);
 }

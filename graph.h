@@ -15,7 +15,7 @@ public:
     Graph(const std::vector<std::vector<int>> &vAdjMatrix);
     void AddEdge(const std::pair<int, int> &edge);
     void AddVertex(const std::vector<int> &vVertex);
-    std::vector<std::vector<int>> FindMinimumCut() const;
+    std::vector<std::pair<int, int>> FindMinimumCut() const;
 private:
     void BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix);
 	void BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix);
