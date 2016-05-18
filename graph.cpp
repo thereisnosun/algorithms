@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <algorithm>
+#include <ctime>
 
 Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
     m_iVertexNum(0)
@@ -132,13 +133,41 @@ void Graph::AddUniquePair(int m, int n)
     }
 }
 
+//this is just krager algorithm, so it is not necesserely find a minimum cut
+//TODO: test this function carefully
 std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
 {
-    std::vector<std::pair<int, int>> vMinimumCut;
-    std::for_each(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(),[&vMinimumCut](const std::pair<int, int> &edge)->void
-    {
+    std::vector<std::pair<int, int>> vMinimumCut(m_vAdjacencyVector.size());
+    
+    std::copy(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(), vMinimumCut.begin());
+    int iVertexs = m_iVertexNum;
 
-    });
+    std::srand(std::time(0)); 
+    while (iVertexs > 2)
+    {
+        int iRand = std::rand() % vMinimumCut.size();
+        auto edge = vMinimumCut.at(iRand);
+        
+        vMinimumCut.erase(vMinimumCut.begin() + iRand);
+        int deleteVertex = iRand % 2 == 0 ? edge.first : edge.second;
+        int leftVertex = iRand % 2 == 0 ? edge.second : edge.first;
+
+        std::for_each(vMinimumCut.begin(), vMinimumCut.end(), [&deleteVertex, &leftVertex](std::pair<int, int> &currentEdge)->void
+        {
+            if (deleteVertex == currentEdge.first)
+            {
+                currentEdge.first = leftVertex;
+            }
+
+            if (deleteVertex == currentEdge.second)
+            {
+                currentEdge.second = leftVertex;
+            }
+                
+        });
+     
+        --iVertexs;
+    }
 
     return std::move(vMinimumCut);
 }

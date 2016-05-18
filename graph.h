@@ -24,7 +24,7 @@ private:
 	GraphRepresentation CheckRepresentation(const std::vector<std::vector<int>> &vAdjMatrix) const;
 private:
     
-    std::vector<std::pair<int, int> > m_vAdjacencyVector; 
+    std::vector<std::pair<int, int> > m_vAdjacencyVector; //use list instead of vector ?
     int m_iVertexNum;
 };
 
