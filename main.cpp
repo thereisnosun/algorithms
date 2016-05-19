@@ -10,25 +10,34 @@ int main(int argc, char *argv[])
 
 	std::vector<int> vVector(test, test + sizeof(test) / sizeof(int));
 
-	//int iSplit = Sort::MergeSort(vVector.begin(), vVector.end());
-	//std::cout << "Split inversions - " << iSplit << std::endl;
+    //int iSplit = Sort::MergeSort(vVector.begin(), vVector.end());
+    //std::cout << "Split inversions - " << iSplit << std::endl;
 
-    Sort::QuickSort(vVector.begin(), vVector.end());
+    /*Sort::QuickSort(vVector.begin(), vVector.end());
 
 	Algo::PrintContainer(vVector.begin(), vVector.end());
-
+*/
 
 	//TODO: v2012 does not support init list;
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
-    Graph graph({ { 0, 1, 0 },
-                  { 1, 0, 1 },
-                  { 0, 1, 0 } });
+    Graph graph({ { 0, 1, 0, 0, 1 },
+                  { 1, 0, 1, 0, 1 },
+                  { 0, 1, 0, 1, 1 },
+                  { 0, 0, 1, 0, 1 },
+                  { 1, 1, 1, 1, 0} });
+    auto minimumCut = graph.FindMinimumCut();
+    int iMinimumCut = minimumCut.size();
+    std::cout << iMinimumCut;
 #else
+    int line1[] = { 0, 1, 0 };
+    int line2[] = { 1, 0, 1 };
+    int line3[] = { 0, 1, 0 };
 /*      { 0, 1, 0 },
         { 1, 0, 1 },
         { 0, 1, 0 }
 */
-    //TODO: init without initializer list
+    //TODO: support initializer list
+    
 #endif
 
 	return 0;
