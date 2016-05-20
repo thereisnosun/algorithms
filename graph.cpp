@@ -142,7 +142,7 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
     std::copy(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(), vMinimumCut.begin());
     int iVertexs = m_iVertexNum;
 
-    std::srand(std::time(0)); 
+    std::srand(static_cast<unsigned int>(std::time(0))); 
     while (iVertexs > 2)
     {
         int iRand = std::rand() % vMinimumCut.size();
@@ -170,4 +170,12 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
     }
 
     return std::move(vMinimumCut);
+}
+
+
+std::vector<std::pair<int, int>> Graph::FindMinimumPath(int iNode1, int iNode2) const
+{
+    std::vector<std::pair<int, int>> vMinPath;
+
+    return std::move(vMinPath);
 }

@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
                   { 0, 0, 1, 0, 1 },
                   { 1, 1, 1, 1, 0} });
     auto minimumCut = graph.FindMinimumCut();
-    int iMinimumCut = minimumCut.size();
+    size_t iMinimumCut = minimumCut.size();
     std::cout << iMinimumCut;
 #else
     int line1[] = { 0, 1, 0 };
