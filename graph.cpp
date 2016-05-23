@@ -1,6 +1,8 @@
 #include "graph.h"
 #include <algorithm>
 #include <ctime>
+#include <queue>
+#include <map>
 
 Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
     m_iVertexNum(0)
@@ -108,7 +110,7 @@ void Graph::AddVertex(const std::vector<int> &vVertex)
 
 }
 
-
+//TODO: fix incorrect vertexs number
 //FIXME: graph CAN have duplicate edges!
 void Graph::AddUniquePair(int m, int n)
 {
@@ -172,10 +174,50 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
     return std::move(vMinimumCut);
 }
 
-
-std::vector<std::pair<int, int>> Graph::FindMinimumPath(int iNode1, int iNode2) const
+//based on bfs
+int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
-    std::vector<std::pair<int, int>> vMinPath;
+    std::queue<int> checkQueue;
+    std::vector<int> exploredNodes;
+    int iCurrentVertex = 1;
+    checkQueue.push(iCurrentVertex);
+    exploredNodes.push_back(iCurrentVertex);
 
-    return std::move(vMinPath);
+    std::map<int, int> mDistances;
+    mDistances.insert(std::make_pair(iCurrentVertex, 0));
+    while (!checkQueue.empty())
+    {
+        auto currentVertex = checkQueue.front();
+        checkQueue.pop();
+
+        for (auto itCurrent = m_vAdjacencyVector.begin(); itCurrent != m_vAdjacencyVector.end(); ++itCurrent)
+        {
+            int iNewVertex = -1;
+            if (itCurrent->first == currentVertex)
+            {
+                iNewVertex = itCurrent->second;
+            }
+
+            if (itCurrent->second == currentVertex)
+            {
+                iNewVertex = itCurrent->first;
+            }
+
+            if (iNewVertex != -1)
+            {
+                auto itFind = std::find(exploredNodes.begin(), exploredNodes.end(), iNewVertex);
+                if (itFind == std::end(exploredNodes))
+                {
+                    exploredNodes.push_back(iNewVertex);
+                    checkQueue.push(iNewVertex);
+                    int iCurrDist = mDistances.at(currentVertex);
+                    mDistances.insert(std::make_pair(iNewVertex, ++iCurrDist));
+                }
+               
+            }
+       
+        }
+    }
+
+    return mDistances.at(iNode2);
 }

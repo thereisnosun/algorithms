@@ -16,7 +16,7 @@ public:
     void AddEdge(const std::pair<int, int> &edge);
     void AddVertex(const std::vector<int> &vVertex);
     std::vector<std::pair<int, int>> FindMinimumCut() const;
-    std::vector<std::pair<int, int>> FindMinimumPath(int iNode1, int iNode2) const;
+    int FindMinimumPath(int iNode1, int iNode2) const;
 private:
     void BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix);
 	void BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix);
