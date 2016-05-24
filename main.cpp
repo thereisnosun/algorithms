@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
                     {0, 1, 1, 0, 1, 1 },
                     {0, 0, 1, 1, 0, 1 },
                     {0, 0, 0, 1, 1, 0 }, });
-    int iPath = graphPath.FindMinimumPath(1, 6);
+    int iPath = graphPath.FindMinimumPath(2, 4);
     std::cout << iPath;
 
 #else

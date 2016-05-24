@@ -4,6 +4,8 @@
 #include <queue>
 #include <map>
 
+
+//TODO: add ability to insert not connected vertexes
 Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
     m_iVertexNum(0)
 {
@@ -68,6 +70,7 @@ void Graph::BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix)
 
         ++glVertex;
     }
+    m_iVertexNum = --glVertex;
 }
 
 //second case representation
@@ -89,6 +92,7 @@ void Graph::BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix)
 
 		++glVertex;
 	}
+    m_iVertexNum = --glVertex;
 }
 
 
@@ -108,9 +112,10 @@ void Graph::AddVertex(const std::vector<int> &vVertex)
         AddUniquePair(m_iVertexNum + 1, iVertex);
     });
 
+    ++m_iVertexNum;
+
 }
 
-//TODO: fix incorrect vertexs number
 //FIXME: graph CAN have duplicate edges!
 void Graph::AddUniquePair(int m, int n)
 {
@@ -131,7 +136,6 @@ void Graph::AddUniquePair(int m, int n)
     if (itFind == std::end(m_vAdjacencyVector))
     {
         m_vAdjacencyVector.push_back(std::make_pair(m, n));
-		++m_iVertexNum;
     }
 }
 
@@ -175,11 +179,12 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
 }
 
 //based on bfs
+//TODO: BFS - separate routine, use it for finding minimum path and connected components
 int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
     std::queue<int> checkQueue;
     std::vector<int> exploredNodes;
-    int iCurrentVertex = 1;
+    int iCurrentVertex = iNode1;
     checkQueue.push(iCurrentVertex);
     exploredNodes.push_back(iCurrentVertex);
 
