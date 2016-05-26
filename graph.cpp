@@ -175,7 +175,18 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
         --iVertexs;
     }
 
-    return std::move(vMinimumCut);
+
+    auto itNewEndr = std::remove_if(vMinimumCut.begin(), vMinimumCut.end(), [&vMinimumCut](const std::pair<int, int> &currentEdge)->bool
+    {
+        if (currentEdge.first == currentEdge.second)
+            return true;
+        return false;
+    });
+
+    std::vector<std::pair<int, int>> vTrueMinCut(vMinimumCut.begin(), itNewEndr);
+    
+
+    return std::move(vTrueMinCut);
 }
 
 //based on bfs
