@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 
 enum class GraphRepresentation
 {
@@ -29,6 +30,13 @@ private:
     int m_iVertexNum;
 };
 
+
+//by simple meant undirected unweight graph
+class SimpleGraph: public Graph
+{
+
+};
+
 //how direction can be represented?
 //first vertex of the pair is the starting point ?
 class DirectedGraph /*: public Graph*/
@@ -38,6 +46,7 @@ public:
     {
     }
 private:
+    std::multimap<std::pair<int, int>, bool> m_mEdges;
 };
 
 class WeightGraph
@@ -46,5 +55,7 @@ public:
     WeightGraph()
     {
     }
+private:
+    std::multimap<std::pair<int, int>, int> m_mEdges;
 };
 

@@ -4,7 +4,6 @@
 #include <queue>
 #include <map>
 
-
 //TODO: add ability to insert not connected vertexes
 Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
     m_iVertexNum(0)
@@ -174,7 +173,6 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
      
         --iVertexs;
     }
-
 
     auto itNewEndr = std::remove_if(vMinimumCut.begin(), vMinimumCut.end(), [&vMinimumCut](const std::pair<int, int> &currentEdge)->bool
     {
