@@ -10,13 +10,26 @@ enum class GraphRepresentation
 };
 
 
-class Graph
+
+class IGraph
+{
+public:
+	virtual int FindMinimumCut() const = 0;
+
+};
+
+//TODO: vertex and edge should have each one classes in order to satisty whole class hierarchy polymorphic behaviour
+//edges shall be adopted according to graph
+
+
+//this will be the very basic grapsh representation
+class Graph: public IGraph
 {
 public:
     Graph(const std::vector<std::vector<int>> &vAdjMatrix);
     void AddEdge(const std::pair<int, int> &edge);
     void AddVertex(const std::vector<int> &vVertex);
-    std::vector<std::pair<int, int>> FindMinimumCut() const;
+    int FindMinimumCut() const;
     int FindMinimumPath(int iNode1, int iNode2) const;
 private:
     void BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix);
@@ -30,12 +43,6 @@ private:
     int m_iVertexNum;
 };
 
-
-//by simple meant undirected unweight graph
-class SimpleGraph: public Graph
-{
-
-};
 
 //how direction can be represented?
 //first vertex of the pair is the starting point ?
