@@ -140,7 +140,7 @@ void Graph::AddUniquePair(int m, int n)
 
 //this is just krager algorithm, so it is not necesserely find a minimum cut
 //TODO: test this function carefully
-std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
+size_t Graph::FindMinimumCut() const
 {
     std::vector<std::pair<int, int>> vMinimumCut(m_vAdjacencyVector.size());
     
@@ -184,7 +184,7 @@ std::vector<std::pair<int, int>> Graph::FindMinimumCut() const
     std::vector<std::pair<int, int>> vTrueMinCut(vMinimumCut.begin(), itNewEndr);
     
 
-    return std::move(vTrueMinCut);
+    return vTrueMinCut.size();
 }
 
 //based on bfs

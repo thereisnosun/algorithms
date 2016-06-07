@@ -60,8 +60,7 @@ void MinimumCutTest()
     { 0, 0, 1, 0, 1 },
     { 1, 1, 1, 1, 0 } });
     auto minimumCut = graph.FindMinimumCut();
-    size_t iMinimumCut = minimumCut.size();
-    std::cout << iMinimumCut;
+    std::cout << minimumCut;
 #else
     int line1[] = { 0, 1, 0 };
     int line2[] = { 1, 0, 1 };
