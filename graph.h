@@ -17,8 +17,6 @@ public:
 
 };
 
-
-
 //TODO: implement DFS
 //this will be the very basic grapsh representation
 class Graph: public IGraph
@@ -41,26 +39,4 @@ private:
     int m_iVertexNum;
 };
 
-
-//how direction can be represented?
-//first vertex of the pair is the starting point ?
-class DirectedGraph /*: public Graph*/
-{
-public:
-    DirectedGraph()
-    {
-    }
-private:
-    std::multimap<std::pair<int, int>, bool> m_mEdges;
-};
-
-class WeightGraph
-{
-public:
-    WeightGraph()
-    {
-    }
-private:
-    std::multimap<std::pair<int, int>, int> m_mEdges;
-};
 
