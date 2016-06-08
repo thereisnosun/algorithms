@@ -28,20 +28,20 @@ namespace Sort
     }
 
 	template <class Type>
-    std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
+    std::unique_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
     {
         if (vVector.size() == 1)
-            return std::make_shared<std::vector<Type>>(vVector);
+            return std::move(std::make_unique<std::vector<Type>>(vVector));
 
-        int iMiddle = vVector.size() / 2;
+        int iMiddle = static_cast<int>(vVector.size() / 2);
 
         std::vector<Type> vVec1(vVector.begin(), vVector.begin() + iMiddle);
         std::vector<Type> vVec2(vVector.begin() + iMiddle, vVector.end());
 
-        std::shared_ptr<std::vector<Type>> vVector1 = MergeSort(vVec1);
-        std::shared_ptr<std::vector<Type>> vVector2 = MergeSort(vVec2);
+        std::unique_ptr<std::vector<Type>> vVector1 = MergeSort(vVec1);
+        std::unique_ptr<std::vector<Type>> vVector2 = MergeSort(vVec2);
 
-        return  Implementation::Merge(vVector1, vVector2);
+        return  std::move(Implementation::Merge(std::move(vVector1), std::move(vVector2)));
 
     }
 
@@ -70,7 +70,7 @@ namespace Sort
     {
     public:
         template <class T> friend int MergeSort(T &first, T &last);
-        template <class Type> friend std::shared_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector);
+        template <class Type> friend std::unique_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector);
         template <class T> friend void QuickSort(T &first, T &last);
     private:
         template <class T>
@@ -112,7 +112,7 @@ namespace Sort
 
         //TODO: difference between shared_ptr and unique_ptr
         template <class Type>
-        static std::shared_ptr<std::vector<Type>> Merge(std::shared_ptr<std::vector<Type>> pVec1, std::shared_ptr<std::vector<Type>> pVec2)
+        static std::unique_ptr<std::vector<Type>> Merge(std::unique_ptr<std::vector<Type>> pVec1, std::unique_ptr<std::vector<Type>> pVec2)
         {
             auto Vec1Curr = pVec1->begin();
             auto Vec1End = pVec1->end();
@@ -120,18 +120,18 @@ namespace Sort
             auto Vec2Curr = pVec2->begin();
             auto Vec2End = pVec2->end();
 
-            std::vector<Type> resVector;
+            std::unique_ptr<std::vector<Type>> resVector(new std::vector<Type>);
 
             while (Vec1Curr != Vec1End && Vec2Curr != Vec2End)
             {
                 if (*Vec1Curr > *Vec2Curr)
                 {
-                    resVector.push_back(*Vec1Curr);
+                    resVector->push_back(*Vec1Curr);
                     ++Vec1Curr;
                 }
                 else
                 {
-                    resVector.push_back(*Vec2Curr);
+                    resVector->push_back(*Vec2Curr);
                     ++Vec2Curr;
                 }
             }
@@ -140,11 +140,11 @@ namespace Sort
             auto pEndIter = Vec1Curr == Vec1End ? Vec2End : Vec1End;
             for (; pLastIter != pEndIter; ++pLastIter)
             {
-                resVector.push_back(*pLastIter);
+                resVector->push_back(*pLastIter);
             }
 
 
-            return std::make_shared<std::vector<Type>>(resVector);
+            return std::move(resVector);
         }
 
 
