@@ -8,7 +8,15 @@ class Edge
 {
 public:
     Edge(int iOne, int iSecond);
-protected:
+    int First() const
+    {
+        return m_Edge.first;
+    }
+    int Second() const
+    {
+        return m_Edge.second;
+    }
+private:
     std::pair<int, int> m_Edge;
 };
 
@@ -24,7 +32,11 @@ class WeightEdge: virtual  public Edge
 {
 public:
     WeightEdge(int iFirst, int iSecond, int iWeight);
-protected:
+    int Weight() const
+    {
+        return m_iWeight;
+    }
+private:
     int m_iWeight;
 };
 
