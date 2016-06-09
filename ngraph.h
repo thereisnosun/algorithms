@@ -18,6 +18,8 @@ public:
     void AddEdge(Edge *edge);
     void AddVertex();
 private:
-    std::vector<std::unique_ptr<Edge>> m_vEdges;
+    void AddUniquePair(int m, int n);
+private:
+    std::vector<std::shared_ptr<Edge>> m_vEdges;
     int m_iNumVertex;
 };

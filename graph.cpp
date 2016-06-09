@@ -183,7 +183,7 @@ size_t Graph::FindMinimumCut() const
 
     std::vector<std::pair<int, int>> vTrueMinCut(vMinimumCut.begin(), itNewEndr);
     
-    //TODO: check if size of the graph was not changes, if it was not return cashed value
+
     return vTrueMinCut.size();
 }
 

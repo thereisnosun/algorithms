@@ -16,6 +16,18 @@ public:
     {
         return m_Edge.second;
     }
+    void SetFirst(int iOne)
+    {
+        m_Edge.first = iOne;
+    }
+    void SetSecond(int iTwo)
+    {
+        m_Edge.second = iTwo;
+    }
+    bool IsSelfLoop() const
+    {
+        return m_Edge.first == m_Edge.second;
+    }
 private:
     std::pair<int, int> m_Edge;
 };
