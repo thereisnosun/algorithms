@@ -27,18 +27,12 @@
     <ClCompile Include="edge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ngraph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="edge.h">

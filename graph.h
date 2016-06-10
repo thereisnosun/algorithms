@@ -1,42 +1,27 @@
 #pragma once
+#include "edge.h"
 #include <vector>
-#include <map>
-
-enum class GraphRepresentation
-{
-	NONE,
-	MATRIX,
-	VECTOR_LIST
-};
+#include <memory>
 
 
-class IGraph
+
+//TODO: determine type of graph depending on constructor which was called
+//and then allow only that graph-specific types
+class Graph
 {
 public:
-	virtual size_t FindMinimumCut() const = 0;
-
-};
-
-//TODO: implement DFS
-//this will be the very basic grapsh representation
-class Graph: public IGraph
-{
-public:
+    Graph()
+    {
+    }
     Graph(const std::vector<std::vector<int>> &vAdjMatrix);
-    void AddEdge(const std::pair<int, int> &edge);
-    void AddVertex(const std::vector<int> &vVertex);
     size_t FindMinimumCut() const;
     int FindMinimumPath(int iNode1, int iNode2) const;
+    void AddEdge(Edge *edge);
+    void AddEdge(int iVert1, int iVert2);
+    void AddVertex(const std::vector<int> &vAdjency);
 private:
-    void BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix);
-	void BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix);
-	
-    void AddUniquePair(int, int);
-	GraphRepresentation CheckRepresentation(const std::vector<std::vector<int>> &vAdjMatrix) const;
+    void AddUniquePair(int m, int n);
 private:
-    
-    std::vector<std::pair<int, int> > m_vAdjacencyVector; //use list instead of vector ?
-    int m_iVertexNum;
+    std::vector<std::shared_ptr<Edge>> m_vEdges;
+    int m_iNumVertex;
 };
-
-

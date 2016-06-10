@@ -2,7 +2,6 @@
 #include "algorithms.h"
 #include "sort.h"
 #include "graph.h"
-#include "ngraph.h"
 
 void MinimumCutTest();
 void MinimumPathTest();
@@ -44,7 +43,7 @@ void QuickSortTest()
 void MinimumPathTest()
 {
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
-    NGraph graphPath({ {0, 1, 1, 0, 0, 0},
+    Graph graphPath({ {0, 1, 1, 0, 0, 0},
                     {1, 0, 0, 1, 0, 0},
                     {1, 0, 0, 1, 1, 0 },
                     {0, 1, 1, 0, 1, 1 },
@@ -59,7 +58,7 @@ void MinimumPathTest()
 void MinimumCutTest()
 {
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
-    NGraph graph({ { 0, 1, 0, 0, 1 },
+    Graph graph({ { 0, 1, 0, 0, 1 },
     { 1, 0, 1, 0, 1 },
     { 0, 1, 0, 1, 1 },
     { 0, 0, 1, 0, 1 },

@@ -150,12 +150,10 @@
     <ClCompile Include="edge.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ngraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
     <ClInclude Include="edge.h" />
-    <ClInclude Include="graph.h" />
     <ClInclude Include="ngraph.h" />
     <ClInclude Include="sort.h" />
   </ItemGroup>

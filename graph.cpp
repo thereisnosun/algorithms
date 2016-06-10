@@ -1,194 +1,121 @@
-#include "graph.h"
 #include <algorithm>
 #include <ctime>
 #include <queue>
-#include <map>
+#include "graph.h"
 
-//TODO: add ability to insert not connected vertexes
-Graph::Graph(const std::vector<std::vector<int>> &vAdjMatrix):
-    m_iVertexNum(0)
+//on the current state of implementation lets assume graph can have duplicate edeges
+Graph::Graph(const std::vector<std::vector<int>> &vAdjencyMatrix)
 {
-	GraphRepresentation repr = CheckRepresentation(vAdjMatrix);
-	if (repr == GraphRepresentation::MATRIX)
-	{
-		BuildFromMatrix(vAdjMatrix);
-	}
-	else if (repr == GraphRepresentation::VECTOR_LIST)
-	{
-		BuildFromVectorList(vAdjMatrix);
-	}
-	else
-	{
-		//TODO: throw exception
-	}
-    
-}
-
-GraphRepresentation Graph::CheckRepresentation(const std::vector<std::vector<int>> &vAdjMatrix) const
-{
-	GraphRepresentation graphRepr = GraphRepresentation::MATRIX;
-	size_t uMatrixHeight = vAdjMatrix.size();
-
-	for( auto itCurrent = vAdjMatrix.begin(); itCurrent != vAdjMatrix.end(); ++itCurrent)
-	{
-		if (uMatrixHeight != itCurrent->size())
-		{
-			graphRepr = GraphRepresentation::VECTOR_LIST;
-			break;
-		}
-	}
-
-	return std::move(graphRepr);
-}
-
-//first case
-//representation:
-//0 1 0
-//1 0 1
-//0 1 0
-void Graph::BuildFromMatrix(const std::vector<std::vector<int>> &vAdjMatrix)
-{
-    auto itCurrent = vAdjMatrix.begin();
-    auto itEnd = vAdjMatrix.end();
     int glVertex = 1;
-    for (; itCurrent != itEnd; ++itCurrent)
+    std::for_each(vAdjencyMatrix.begin(), vAdjencyMatrix.end(),
+                  [&glVertex, this](const std::vector<int> &vInVec)->void
     {
-        auto vAdjVector = *itCurrent;
-        auto itAdjCurrent = vAdjVector.begin();
-        auto itAdjEnd = vAdjVector.end();
         int lcVertex = 1;
-        for (; itAdjCurrent != itAdjEnd; ++itAdjCurrent)
+        std::for_each(vInVec.begin(), vInVec.end(), [&lcVertex, &glVertex, this](int iVert)->void
         {
-            if (*itAdjCurrent == 1)
+            if (iVert == 1)
             {
-                AddUniquePair(glVertex, lcVertex);
+                AddUniquePair(lcVertex, glVertex);
             }
-
             ++lcVertex;
-        }
-
+        });
         ++glVertex;
-    }
-    m_iVertexNum = --glVertex;
-}
-
-//second case representation
-//2
-//1, 3
-//2
-void Graph::BuildFromVectorList(const std::vector<std::vector<int>> &vAdjMatrix)
-{
-	auto itCurrent = vAdjMatrix.begin();
-	auto itEnd = vAdjMatrix.end();
-	int glVertex = 1;
-	for (; itCurrent != itEnd; ++itCurrent)
-	{
-		auto vAdjVector = *itCurrent;
-		std::for_each(vAdjVector.begin(), vAdjVector.end(), [this, glVertex](int iVertex)->void
-		{
-			AddUniquePair(glVertex, iVertex);
-		});
-
-		++glVertex;
-	}
-    m_iVertexNum = --glVertex;
+    });
+    m_iNumVertex = --glVertex;
 }
 
 
-void Graph::AddEdge(const std::pair<int, int> &edge)
+void Graph::AddEdge(Edge *edge)
 {
-    AddUniquePair(edge.first, edge.second);
+    AddUniquePair(edge->First(), edge->Second()); //looks ugly
 }
 
-//represented by the vector of edges, which connected with each other
-void Graph::AddVertex(const std::vector<int> &vVertex)
+void Graph::AddEdge(int iVert1, int Vert2)
 {
-    if (vVertex.empty())
+    AddUniquePair(iVert1, Vert2);
+}
+
+void Graph::AddVertex(const std::vector<int> &vAdjency)
+{
+    if (vAdjency.empty())
         return;
 
-    std::for_each(vVertex.begin(), vVertex.end(), [this](int iVertex)->void
+    std::for_each(vAdjency.begin(), vAdjency.end(), [this](int iVertex)->void
     {
-        AddUniquePair(m_iVertexNum + 1, iVertex);
+        AddUniquePair(m_iNumVertex + 1, iVertex);
     });
 
-    ++m_iVertexNum;
-
+    ++m_iNumVertex;
 }
 
-//FIXME: graph CAN have duplicate edges!
 void Graph::AddUniquePair(int m, int n)
 {
-    auto itFind = std::find_if(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(), 
-                               [&m, &n](const std::pair<int, int> &currPair)->bool
+    auto itFind = std::find_if(m_vEdges.begin(), m_vEdges.end(),
+                               [&m, &n](const std::shared_ptr<Edge> &currEdge)->bool
     {
-        if (currPair.first == m && currPair.second == n)
+        if (currEdge->First() == m && currEdge->Second() == n)
         {
             return true;
         }
-        if (currPair.first == n && currPair.second == m)
+        if (currEdge->First() == n && currEdge->Second() == m)
         {
             return true;
         }
         return false;
     });
 
-    if (itFind == std::end(m_vAdjacencyVector))
+    if (itFind == std::end(m_vEdges))
     {
-        m_vAdjacencyVector.push_back(std::make_pair(m, n));
+        std::shared_ptr<Edge> pEdge(new Edge(m, n));
+        m_vEdges.push_back(std::move(pEdge));
     }
 }
 
-//this is just krager algorithm, so it is not necesserely find a minimum cut
-//TODO: test this function carefully
 size_t Graph::FindMinimumCut() const
 {
-    std::vector<std::pair<int, int>> vMinimumCut(m_vAdjacencyVector.size());
+    //TODO: check if size of the graph was not changes, if it was not return cashed value
+    int iVertexs = m_iNumVertex;
+    std::vector<std::shared_ptr<Edge>> vMinimumCut(m_vEdges.size());
+    std::copy(m_vEdges.begin(), m_vEdges.end(), vMinimumCut.begin());
+    std::srand(static_cast<unsigned int>(std::time(0)));
     
-    std::copy(m_vAdjacencyVector.begin(), m_vAdjacencyVector.end(), vMinimumCut.begin());
-    int iVertexs = m_iVertexNum;
-
-    std::srand(static_cast<unsigned int>(std::time(0))); 
     while (iVertexs > 2)
     {
         int iRand = std::rand() % vMinimumCut.size();
         auto edge = vMinimumCut.at(iRand);
-        
+
         vMinimumCut.erase(vMinimumCut.begin() + iRand);
-        int deleteVertex = iRand % 2 == 0 ? edge.first : edge.second;
-        int leftVertex = iRand % 2 == 0 ? edge.second : edge.first;
+        int deleteVertex = iRand % 2 == 0 ? edge->First() : edge->Second();
+        int leftVertex = iRand % 2 == 0 ? edge->Second() : edge->First();
 
-        std::for_each(vMinimumCut.begin(), vMinimumCut.end(), [&deleteVertex, &leftVertex](std::pair<int, int> &currentEdge)->void
+        std::for_each(vMinimumCut.begin(), vMinimumCut.end(), 
+                      [&deleteVertex, &leftVertex](std::shared_ptr<Edge> &currentEdge)->void
         {
-            if (deleteVertex == currentEdge.first)
+            if (deleteVertex == currentEdge->First())
             {
-                currentEdge.first = leftVertex;
+                currentEdge->SetFirst(leftVertex);
             }
 
-            if (deleteVertex == currentEdge.second)
+            if (deleteVertex == currentEdge->Second())
             {
-                currentEdge.second = leftVertex;
+                currentEdge->SetSecond(leftVertex);
             }
-                
+
         });
-     
         --iVertexs;
     }
 
-    auto itNewEndr = std::remove_if(vMinimumCut.begin(), vMinimumCut.end(), [&vMinimumCut](const std::pair<int, int> &currentEdge)->bool
+    auto itNewEndr = std::remove_if(vMinimumCut.begin(), vMinimumCut.end(), 
+                                    [](const std::shared_ptr<Edge> &currentEdge)->bool
     {
-        if (currentEdge.first == currentEdge.second)
-            return true;
-        return false;
+        return currentEdge->IsSelfLoop();
     });
 
-    std::vector<std::pair<int, int>> vTrueMinCut(vMinimumCut.begin(), itNewEndr);
-    
-
-    return vTrueMinCut.size();
+    int iMinCut = static_cast<int>(std::distance(vMinimumCut.begin(), itNewEndr));
+   
+    return iMinCut;
 }
 
-//based on bfs
-//TODO: BFS - separate routine, use it for finding minimum path and connected components
 int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
     std::queue<int> checkQueue;
@@ -204,17 +131,18 @@ int Graph::FindMinimumPath(int iNode1, int iNode2) const
         auto currentVertex = checkQueue.front();
         checkQueue.pop();
 
-        for (auto itCurrent = m_vAdjacencyVector.begin(); itCurrent != m_vAdjacencyVector.end(); ++itCurrent)
+        for (auto itCurrent = m_vEdges.begin(); itCurrent != m_vEdges.end(); ++itCurrent)
         {
+            auto curEdge = *itCurrent;
             int iNewVertex = -1;
-            if (itCurrent->first == currentVertex)
+            if (curEdge->First() == currentVertex)
             {
-                iNewVertex = itCurrent->second;
+                iNewVertex = curEdge->Second();
             }
 
-            if (itCurrent->second == currentVertex)
+            if (curEdge->Second() == currentVertex)
             {
-                iNewVertex = itCurrent->first;
+                iNewVertex = curEdge->First();
             }
 
             if (iNewVertex != -1)
@@ -227,11 +155,12 @@ int Graph::FindMinimumPath(int iNode1, int iNode2) const
                     int iCurrDist = mDistances.at(currentVertex);
                     mDistances.insert(std::make_pair(iNewVertex, ++iCurrDist));
                 }
-               
+
             }
-       
+
         }
     }
 
-    return mDistances.at(iNode2);
+    int  iDistance = mDistances.at(iNode2);
+    return iDistance;
 }
