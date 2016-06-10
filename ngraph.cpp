@@ -27,12 +27,25 @@ NGraph::NGraph(const std::vector<std::vector<int>> &vAdjencyMatrix)
 
 void NGraph::AddEdge(Edge *edge)
 {
-
+    AddUniquePair(edge->First(), edge->Second()); //looks ugly
 }
 
-void NGraph::AddVertex()
+void NGraph::AddEdge(int iVert1, int Vert2)
 {
+    AddUniquePair(iVert1, Vert2);
+}
 
+void NGraph::AddVertex(const std::vector<int> &vAdjency)
+{
+    if (vAdjency.empty())
+        return;
+
+    std::for_each(vAdjency.begin(), vAdjency.end(), [this](int iVertex)->void
+    {
+        AddUniquePair(m_iNumVertex + 1, iVertex);
+    });
+
+    ++m_iNumVertex;
 }
 
 void NGraph::AddUniquePair(int m, int n)

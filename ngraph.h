@@ -17,7 +17,8 @@ public:
     size_t FindMinimumCut() const;
     int FindMinimumPath(int iNode1, int iNode2) const;
     void AddEdge(Edge *edge);
-    void AddVertex();
+    void AddEdge(int iVert1, int iVert2);
+    void AddVertex(const std::vector<int> &vAdjency);
 private:
     void AddUniquePair(int m, int n);
 private:
