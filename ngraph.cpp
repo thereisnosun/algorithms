@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <ctime>
+#include <queue>
 #include "ngraph.h"
 
 //on the current state of implementation lets assume graph can have duplicate edeges
@@ -100,4 +101,53 @@ size_t NGraph::FindMinimumCut() const
     int iMinCut = static_cast<int>(std::distance(vMinimumCut.begin(), itNewEndr));
    
     return iMinCut;
+}
+
+int NGraph::FindMinimumPath(int iNode1, int iNode2) const
+{
+    std::queue<int> checkQueue;
+    std::vector<int> exploredNodes;
+    int iCurrentVertex = iNode1;
+    checkQueue.push(iCurrentVertex);
+    exploredNodes.push_back(iCurrentVertex);
+
+    std::map<int, int> mDistances;
+    mDistances.insert(std::make_pair(iCurrentVertex, 0));
+    while (!checkQueue.empty())
+    {
+        auto currentVertex = checkQueue.front();
+        checkQueue.pop();
+
+        for (auto itCurrent = m_vEdges.begin(); itCurrent != m_vEdges.end(); ++itCurrent)
+        {
+            auto curEdge = *itCurrent;
+            int iNewVertex = -1;
+            if (curEdge->First() == currentVertex)
+            {
+                iNewVertex = curEdge->Second();
+            }
+
+            if (curEdge->Second() == currentVertex)
+            {
+                iNewVertex = curEdge->First();
+            }
+
+            if (iNewVertex != -1)
+            {
+                auto itFind = std::find(exploredNodes.begin(), exploredNodes.end(), iNewVertex);
+                if (itFind == std::end(exploredNodes))
+                {
+                    exploredNodes.push_back(iNewVertex);
+                    checkQueue.push(iNewVertex);
+                    int iCurrDist = mDistances.at(currentVertex);
+                    mDistances.insert(std::make_pair(iNewVertex, ++iCurrDist));
+                }
+
+            }
+
+        }
+    }
+
+    int  iDistance = mDistances.at(iNode2);
+    return iDistance;
 }

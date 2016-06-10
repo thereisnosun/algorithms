@@ -11,7 +11,7 @@ void QuickSortTest();
 
 int main(int argc, char *argv[])
 {
-    MinimumCutTest();
+    MinimumPathTest();
 
 	return 0;
 }
@@ -44,7 +44,7 @@ void QuickSortTest()
 void MinimumPathTest()
 {
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
-    Graph graphPath({ {0, 1, 1, 0, 0, 0},
+    NGraph graphPath({ {0, 1, 1, 0, 0, 0},
                     {1, 0, 0, 1, 0, 0},
                     {1, 0, 0, 1, 1, 0 },
                     {0, 1, 1, 0, 1, 1 },

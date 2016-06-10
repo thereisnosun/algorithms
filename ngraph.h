@@ -15,6 +15,7 @@ public:
     }
     NGraph(const std::vector<std::vector<int>> &vAdjMatrix);
     size_t FindMinimumCut() const;
+    int FindMinimumPath(int iNode1, int iNode2) const;
     void AddEdge(Edge *edge);
     void AddVertex();
 private:
