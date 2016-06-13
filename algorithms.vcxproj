@@ -154,7 +154,7 @@
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
     <ClInclude Include="edge.h" />
-    <ClInclude Include="ngraph.h" />
+    <ClInclude Include="graph.h" />
     <ClInclude Include="sort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

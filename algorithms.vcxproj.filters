@@ -38,7 +38,7 @@
     <ClInclude Include="edge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ngraph.h">
+    <ClInclude Include="graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
