@@ -2,11 +2,13 @@
 #include "edge.h"
 #include <vector>
 #include <memory>
+#include <functional>
 
 
 
 //TODO: determine type of graph depending on constructor which was called
-//and then allow only that graph-specific types
+//and then allow only that graph-specific types(some cool stuff with templates)
+
 class Graph
 {
 public:
@@ -19,6 +21,8 @@ public:
     void AddEdge(Edge *edge);
     void AddEdge(int iVert1, int iVert2);
     void AddVertex(const std::vector<int> &vAdjency);
+public:
+    void BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc) const;
 private:
     void AddUniquePair(int m, int n);
 private:

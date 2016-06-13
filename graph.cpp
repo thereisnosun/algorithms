@@ -118,14 +118,26 @@ size_t Graph::FindMinimumCut() const
 
 int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
+    std::map<int, int> mDistances;
+    mDistances.insert(std::make_pair(iNode1, 0));
+    BFS(iNode1, [&mDistances](int iNode1, int Node2) -> void
+    {
+        int iCurrDist = mDistances.at(iNode1);
+        mDistances.insert(std::make_pair(Node2, ++iCurrDist));
+    });
+
+    int  iDistance = mDistances.at(iNode2);
+    return iDistance;
+}
+
+void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc) const
+{
     std::queue<int> checkQueue;
     std::vector<int> exploredNodes;
-    int iCurrentVertex = iNode1;
+    int iCurrentVertex = iNode;
     checkQueue.push(iCurrentVertex);
     exploredNodes.push_back(iCurrentVertex);
 
-    std::map<int, int> mDistances;
-    mDistances.insert(std::make_pair(iCurrentVertex, 0));
     while (!checkQueue.empty())
     {
         auto currentVertex = checkQueue.front();
@@ -152,15 +164,10 @@ int Graph::FindMinimumPath(int iNode1, int iNode2) const
                 {
                     exploredNodes.push_back(iNewVertex);
                     checkQueue.push(iNewVertex);
-                    int iCurrDist = mDistances.at(currentVertex);
-                    mDistances.insert(std::make_pair(iNewVertex, ++iCurrDist));
+                    workFunc(currentVertex, iNewVertex);
                 }
-
             }
 
         }
     }
-
-    int  iDistance = mDistances.at(iNode2);
-    return iDistance;
 }
