@@ -21,8 +21,12 @@ public:
     void AddEdge(Edge *edge);
     void AddEdge(int iVert1, int iVert2);
     void AddVertex(const std::vector<int> &vAdjency);
+    std::map<int, int> TopologicalOrder() const;
 public:
+    //these should be "working horses" of the class, 
+    //actual usage should be done by user routines which use them for common purposes
     void BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc) const;
+    void DFS(int iNode) const;
 private:
     void AddUniquePair(int m, int n);
 private:

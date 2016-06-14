@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <ctime>
 #include <queue>
+#include <stack>
 #include "graph.h"
 
 //on the current state of implementation lets assume graph can have duplicate edeges
@@ -71,9 +72,11 @@ void Graph::AddUniquePair(int m, int n)
     }
 }
 
+
+//TODO: check if size of the graph was not changes, if it was not return cashed value
+//TODO: add ability to add stand-alone nodes(which is not connected between each other)
 size_t Graph::FindMinimumCut() const
 {
-    //TODO: check if size of the graph was not changes, if it was not return cashed value
     int iVertexs = m_iNumVertex;
     std::vector<std::shared_ptr<Edge>> vMinimumCut(m_vEdges.size());
     std::copy(m_vEdges.begin(), m_vEdges.end(), vMinimumCut.begin());
@@ -171,3 +174,53 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
         }
     }
 }
+
+void Graph::DFS(int iNode) const
+{
+    std::stack<int> checkStack;
+    std::vector<int> markedNodes;
+
+    checkStack.push(iNode);
+    while (!checkStack.empty())
+    {
+        int iCurrVertex = checkStack.top();
+        checkStack.pop();
+
+        for (auto itCurr = m_vEdges.begin(); itCurr != m_vEdges.end(); ++itCurr)
+        {
+            auto curEdge = *itCurr;
+            int iNewVertex = -1;
+            if (curEdge->First() == iCurrVertex)
+            {
+                iNewVertex = curEdge->Second();
+            }
+
+            if (curEdge->Second() == iCurrVertex)
+            {
+                iNewVertex = curEdge->First();
+            }
+            if (iNewVertex != -1)
+            {
+                markedNodes.push_back(iNewVertex);
+                auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
+                if (itFind != std::end(markedNodes))
+                {
+                    //markedNodes.push_back(iNewVertex);
+                    checkStack.push(iNewVertex);
+                }
+            }
+        }
+
+    }
+
+}
+
+std::map<int, int> Graph::TopologicalOrder() const
+{
+    std::map<int, int> mOrder;
+
+    return std::move(mOrder);
+}
+//TODO: 
+// implement check whether graph is acyclic
+//implement topological ordering
