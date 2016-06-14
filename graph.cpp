@@ -16,7 +16,7 @@ Graph::Graph(const std::vector<std::vector<int>> &vAdjencyMatrix)
         {
             if (iVert == 1)
             {
-                AddUniquePair(lcVertex, glVertex);
+                AddUniqueEdge(new Edge(lcVertex, glVertex));
             }
             ++lcVertex;
         });
@@ -28,12 +28,12 @@ Graph::Graph(const std::vector<std::vector<int>> &vAdjencyMatrix)
 
 void Graph::AddEdge(Edge *edge)
 {
-    AddUniquePair(edge->First(), edge->Second()); //looks ugly
+    AddUniqueEdge(edge); 
 }
 
 void Graph::AddEdge(int iVert1, int Vert2)
 {
-    AddUniquePair(iVert1, Vert2);
+    //AddUniqueEdge(iVert1, Vert2);
 }
 
 void Graph::AddVertex(const std::vector<int> &vAdjency)
@@ -43,22 +43,22 @@ void Graph::AddVertex(const std::vector<int> &vAdjency)
 
     std::for_each(vAdjency.begin(), vAdjency.end(), [this](int iVertex)->void
     {
-        AddUniquePair(m_iNumVertex + 1, iVertex);
+        AddUniqueEdge(new Edge(m_iNumVertex + 1, iVertex));
     });
 
     ++m_iNumVertex;
 }
 
-void Graph::AddUniquePair(int m, int n)
+void Graph::AddUniqueEdge(Edge *edge)
 {
     auto itFind = std::find_if(m_vEdges.begin(), m_vEdges.end(),
-                               [&m, &n](const std::shared_ptr<Edge> &currEdge)->bool
+                               [&edge](const std::shared_ptr<Edge> &currEdge)->bool
     {
-        if (currEdge->First() == m && currEdge->Second() == n)
+        if (currEdge->First() == edge->First() && currEdge->Second() == edge->Second())
         {
             return true;
         }
-        if (currEdge->First() == n && currEdge->Second() == m)
+        if (currEdge->First() == edge->Second() && currEdge->Second() == edge->First())
         {
             return true;
         }
@@ -67,7 +67,8 @@ void Graph::AddUniquePair(int m, int n)
 
     if (itFind == std::end(m_vEdges))
     {
-        std::shared_ptr<Edge> pEdge(new Edge(m, n));
+        //check for memory leak
+        std::shared_ptr<Edge> pEdge(edge);
         m_vEdges.push_back(std::move(pEdge));
     }
 }
@@ -215,7 +216,7 @@ void Graph::DFS(int iNode) const
 
 }
 
-std::map<int, int> Graph::TopologicalOrder() const
+std::map<int, int> DirectedGraph::TopologicalOrder() const
 {
     std::map<int, int> mOrder;
 
