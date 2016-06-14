@@ -33,7 +33,7 @@ void Graph::AddEdge(Edge *edge)
 
 void Graph::AddEdge(int iVert1, int Vert2)
 {
-    //AddUniqueEdge(iVert1, Vert2);
+    AddUniqueEdge(new Edge(iVert1, Vert2));
 }
 
 void Graph::AddVertex(const std::vector<int> &vAdjency)
@@ -70,6 +70,11 @@ void Graph::AddUniqueEdge(Edge *edge)
         //check for memory leak
         std::shared_ptr<Edge> pEdge(edge);
         m_vEdges.push_back(std::move(pEdge));
+    }
+    else
+    {
+        delete edge;
+        edge = nullptr;
     }
 }
 

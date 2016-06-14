@@ -6,6 +6,11 @@ Edge::Edge(int iOne, int iTwo)
     m_Edge.second = iTwo;
 }
 
+/*
+m_bFirstLast - boolean var which determins direction
+if true - then first node -> second node
+if false - then first node <- second node
+*/
 DirectedEdge::DirectedEdge(int iOne, int iTwo, bool bDirection) :
     Edge(iOne, iTwo), m_bFirstLast(bDirection)
 {
