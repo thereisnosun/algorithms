@@ -5,14 +5,32 @@
 
 void MinimumCutTest();
 void MinimumPathTest();
+void TopologicalOrderTest();
+
 void MergeSortTest();
 void QuickSortTest();
 
+
 int main(int argc, char *argv[])
 {
-    MinimumPathTest();
+    //MinimumPathTest();
+    TopologicalOrderTest();
 
 	return 0;
+}
+
+void TopologicalOrderTest()
+{
+#ifdef  _MSC_PLATFORM_TOOLSET_v140
+    DirectedGraph directedGraph;
+    directedGraph.AddEdge(new DirectedEdge(1, 2, true));
+    directedGraph.AddEdge(new DirectedEdge(1, 3, true));
+    directedGraph.AddEdge(new DirectedEdge(2, 4, true));
+    directedGraph.AddEdge(new DirectedEdge(3, 4, true));
+    auto toplogicOrder = directedGraph.TopologicalOrder();
+
+#else
+#endif
 }
 
 void MergeSortTest()
@@ -52,6 +70,17 @@ void MinimumPathTest()
     int iPath = graphPath.FindMinimumPath(1, 4);
     std::cout << iPath;
 #else
+    Graph graphPath;
+    graph.AddEdge(new Edge(1, 2));
+    graph.AddEdge(new Edge(1, 3));
+    graph.AddEdge(new Edge(2, 4));
+    graph.AddEdge(new Edge(3, 4));
+    graph.AddEdge(new Edge(3, 5));
+    graph.AddEdge(new Edge(4, 5));
+    graph.AddEdge(new Edge(4, 6));
+    graph.AddEdge(new Edge(5, 6));
+    int iPath = graphPath.FindMinimumPath(1, 4);
+    std::cout << iPath;
 #endif
 }
 
@@ -66,13 +95,14 @@ void MinimumCutTest()
     auto minimumCut = graph.FindMinimumCut();
     std::cout << minimumCut;
 #else
-    int line1[] = { 0, 1, 0 };
-    int line2[] = { 1, 0, 1 };
-    int line3[] = { 0, 1, 0 };
-    /*      { 0, 1, 0 },
-    { 1, 0, 1 },
-    { 0, 1, 0 }
-    */
-    //TODO: support initializer list
+    Graph graph;
+    graph.AddEdge(new Edge(1, 2));
+    graph.AddEdge(new Edge(1, 5));
+    graph.AddEdge(new Edge(2, 3));
+    graph.AddEdge(new Edge(4, 5));
+    graph.AddEdge(new Edge(3, 4));
+    graph.AddEdge(new Edge(2, 5));
+    auto minimumCut = graph.FindMinimumCut();
+    std::cout << minimumCut;
 #endif
 }
