@@ -195,14 +195,16 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
 void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workFunc) const
 {
     std::stack<int> checkStack;
-    std::vector<int> markedNodes;
+    std::set<int> markedNodes;
 
     checkStack.push(iNode);
+    markedNodes.insert(iNode);
     while (!checkStack.empty())
     {
         int iCurrVertex = checkStack.top();
         checkStack.pop();
 
+        auto itRet = markedNodes.insert(iCurrVertex);
         for (auto itCurr = m_vEdges.begin(); itCurr != m_vEdges.end(); ++itCurr)
         {
             auto curEdge = *itCurr;
@@ -218,19 +220,18 @@ void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workF
             }
             if (iNewVertex != -1)
             {
-                markedNodes.push_back(iNewVertex);
                 auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
-                if (itFind != std::end(markedNodes))
+                if (itFind == std::end(markedNodes))
                 {
-                    //markedNodes.push_back(iNewVertex);
                     checkStack.push(iNewVertex);
+                    workFunc(curEdge);
                 }
             }
         }
 
     }
-
 }
+//NOTE: can storing neighbours of each edge  help improve productivity ?
 
 //define some template structure which will receive result from the lambdas, (e.g. if graph not-weight then weight edge
 //will always be 1, otherwise it could be some arbitrary value) 
@@ -240,13 +241,28 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
 {
     std::map<int, int> mOrder;
 
+    //find sink vertix, vertix which has not outgoing arcs
     //direction should be taken to consideration
-    int iFirstNode = 1; //currently assuming first node equals 1;
+    int iFirstNode = m_iNumVertex; //currently assuming first node equals 1;
     int iCurrLabel = m_iNumVertex;
     DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge) -> void
     {
-        mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
-        --iCurrLabel;
+        EdgeDirection direction = edge->Direction();
+        std::pair<std::map<int, int>::iterator, bool> retVal;
+        //if (direction == EdgeDirection::FIRST_TO_SECOND)
+        //    retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
+        //else
+        //    retVal = mOrder.insert(std::make_pair(edge->First(), iCurrLabel));
+
+
+        retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
+        if (retVal.second)
+            --iCurrLabel;
+
+        retVal = mOrder.insert(std::make_pair(edge->First(), iCurrLabel));
+        if (retVal.second)
+            --iCurrLabel;
+
     });
 
     return std::move(mOrder);
