@@ -42,8 +42,10 @@ public:
     }
     virtual EdgeDirection Direction() const
     {
-        return EdgeDirection::UNDIRECTED;
+        return m_direction;
     }
+protected:
+    EdgeDirection m_direction;
 private:
     std::pair<int, int> m_Edge;
 };
@@ -52,8 +54,6 @@ class DirectedEdge: virtual public Edge
 {
 public:
     DirectedEdge(int iFirst, int iSecond, bool bDirection);
-protected:
-    EdgeDirection m_direction;
 };
 
 class WeightEdge: virtual  public Edge

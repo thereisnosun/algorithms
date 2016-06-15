@@ -4,6 +4,7 @@ Edge::Edge(int iOne, int iTwo)
 {
     m_Edge.first = iOne;
     m_Edge.second = iTwo;
+    m_direction = EdgeDirection::UNDIRECTED;
 }
 
 /*
