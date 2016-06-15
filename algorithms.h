@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <iterator>
+#include <map>
 
 class Algo
 {
@@ -15,6 +16,19 @@ public:
         for (; pCurr != pEnd; ++pCurr)
         {
             std::cout << *pCurr << " ";
+        }
+    }
+
+    template <class Key, class Value>
+    static void PrintMap(const std::map<Key, Value> &mMap)
+    {
+        auto pCurr = mMap.begin();
+        const auto pEnd = mMap.end();
+        for (; pCurr != pEnd; ++pCurr)
+        {
+            Key key = pCurr->first;
+            Value value = pCurr->second;
+            std::cout << key << "=" << value << " ";
         }
     }
 

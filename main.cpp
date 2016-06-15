@@ -27,8 +27,8 @@ void TopologicalOrderTest()
     directedGraph.AddEdge(new DirectedEdge(1, 3, true));
     directedGraph.AddEdge(new DirectedEdge(2, 4, true));
     directedGraph.AddEdge(new DirectedEdge(3, 4, true));
-    auto toplogicOrder = directedGraph.TopologicalOrder();
-
+    auto topologicOrder = directedGraph.TopologicalOrder();
+    Algo::PrintMap(topologicOrder);
 #else
 #endif
 }
