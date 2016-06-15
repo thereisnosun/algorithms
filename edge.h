@@ -4,6 +4,14 @@
 //TODO: vertex and edge should have each one classes in order to satisty whole class hierarchy polymorphic behaviour
 //edges shall be adopted according to graph
 
+
+enum class EdgeDirection
+{
+    UNDIRECTED  = 1,
+    FIRST_TO_SECOND,
+    SECOND_TO_FIRST
+};
+
 class Edge
 {
 public:
@@ -28,6 +36,14 @@ public:
     {
         return m_Edge.first == m_Edge.second;
     }
+    virtual int Weight() const //will be overriden in case of Weight graph
+    {
+        return 1;
+    }
+    virtual EdgeDirection Direction() const
+    {
+        return EdgeDirection::UNDIRECTED;
+    }
 private:
     std::pair<int, int> m_Edge;
 };
@@ -37,14 +53,14 @@ class DirectedEdge: virtual public Edge
 public:
     DirectedEdge(int iFirst, int iSecond, bool bDirection);
 protected:
-    bool m_bFirstLast;
+    EdgeDirection m_direction;
 };
 
 class WeightEdge: virtual  public Edge
 {
 public:
     WeightEdge(int iFirst, int iSecond, int iWeight);
-    int Weight() const
+    int Weight() const override
     {
         return m_iWeight;
     }
