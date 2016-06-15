@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
-
+#include <set>
 
 
 //TODO: determine type of graph depending on constructor which was called
@@ -35,11 +35,13 @@ public:
     //these should be "working horses" of the class, 
     //actual usage should be done by user routines which use them for common purposes
     void BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc) const;
-    void DFS(int iNode) const;
+    void DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workFunc) const;
 private:
     void AddUniqueEdge(Edge *edge);
+    void AddUniqueVertex(int iVertex);
 protected:
     std::vector<std::shared_ptr<Edge>> m_vEdges;
+    std::set<int> m_sVertex;
     int m_iNumVertex;
     GraphType m_GraphType;
 };

@@ -46,7 +46,7 @@ void Graph::AddVertex(const std::vector<int> &vAdjency)
         AddUniqueEdge(new Edge(m_iNumVertex + 1, iVertex));
     });
 
-    ++m_iNumVertex;
+  //  ++m_iNumVertex;
 }
 
 void Graph::AddUniqueEdge(Edge *edge)
@@ -68,18 +68,29 @@ void Graph::AddUniqueEdge(Edge *edge)
     if (itFind == std::end(m_vEdges))
     {
         //check for memory leak
-        std::shared_ptr<Edge> pEdge(edge);
-        m_vEdges.push_back(std::move(pEdge));
+        m_sVertex.insert(edge->Second());
+        m_sVertex.insert(edge->First());
+        m_iNumVertex = static_cast<int>(m_sVertex.size());
+        m_vEdges.push_back(std::make_shared<Edge>(*edge));
+    
     }
     else
     {
         delete edge;
         edge = nullptr;
     }
+
+  
+
+}
+
+void Graph::AddUniqueVertex(int iNode)
+{
+    
 }
 
 
-//TODO: check if size of the graph was not changes, if it was not return cashed value
+//TODO: check if size of the graph was not changed, if it was not return cashed value
 //TODO: add ability to add stand-alone nodes(which is not connected between each other)
 size_t Graph::FindMinimumCut() const
 {
@@ -181,7 +192,7 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
     }
 }
 
-void Graph::DFS(int iNode) const
+void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workFunc) const
 {
     std::stack<int> checkStack;
     std::vector<int> markedNodes;
@@ -221,9 +232,22 @@ void Graph::DFS(int iNode) const
 
 }
 
+//define some template structure which will receive result from the lambdas, (e.g. if graph not-weight then weight edge
+//will always be 1, otherwise it could be some arbitrary value) 
+//if graph not directed than path will always be walkable, otherwise it will depend on direction
+
 std::map<int, int> DirectedGraph::TopologicalOrder() const
 {
     std::map<int, int> mOrder;
+
+    //direction should be taken to consideration
+    int iFirstNode = 1; //currently assuming first node equals 1;
+    int iCurrLabel = m_iNumVertex;
+    DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge) -> void
+    {
+        mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
+        --iCurrLabel;
+    });
 
     return std::move(mOrder);
 }
