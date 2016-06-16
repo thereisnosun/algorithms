@@ -268,13 +268,13 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
     return std::move(mOrder);
 }
 
-bool DirectedGraph::IsAsyclic() const
+bool DirectedGraph::IsAcyclic() const
 {
     int iFirstNode = 1;
-    bool bIsAsyc = false;;
+    bool bIsCyclic = false;;
     std::vector<int> exploredNodes;
 
-    DFS(iFirstNode, [&bIsAsyc, &exploredNodes](std::shared_ptr<Edge> edge) -> void
+    DFS(iFirstNode, [&bIsCyclic, &exploredNodes](std::shared_ptr<Edge> edge) -> void
     {
         exploredNodes.push_back(edge->First());
         auto direction = edge->Direction();
@@ -283,12 +283,12 @@ bool DirectedGraph::IsAsyclic() const
             if (std::find(exploredNodes.begin(), exploredNodes.end(), edge->Second()) !=
                 std::end(exploredNodes))
             {
-                bIsAsyc = true;
+                bIsCyclic = true;
             }
         }
     });
 
-    return bIsAsyc;
+    return !bIsCyclic;
 }
 //TODO: 
 // implement check whether graph is acyclic
