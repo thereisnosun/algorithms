@@ -50,4 +50,5 @@ class DirectedGraph : public Graph
 {
 public:
     std::map<int, int> TopologicalOrder() const;
+    bool IsAsyclic() const;
 };
