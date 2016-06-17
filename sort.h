@@ -30,8 +30,19 @@ namespace Sort
 	template <class Type>
     std::unique_ptr<std::vector<Type>> MergeSort(std::vector<Type> &vVector)
     {
-        if (vVector.size() == 1)
-            return std::move(std::make_unique<std::vector<Type>>(vVector));
+		if (vVector.size() == 1)
+		{
+#if _MSC_PLATFORM_TOOLSET_v140
+			return std::move(std::make_unique<std::vector<Type>>(vVector));
+#else
+			std::unique_ptr<std::vector<Type>> vVectorPtr;//(new std::vector<Type>());
+			vVectorPtr.reset(&vVector);
+			return std::move(vVectorPtr);
+#endif
+			
+		}
+
+            
 
         int iMiddle = static_cast<int>(vVector.size() / 2);
 

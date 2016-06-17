@@ -71,14 +71,14 @@ void MinimumPathTest()
     std::cout << iPath;
 #else
     Graph graphPath;
-    graph.AddEdge(new Edge(1, 2));
-    graph.AddEdge(new Edge(1, 3));
-    graph.AddEdge(new Edge(2, 4));
-    graph.AddEdge(new Edge(3, 4));
-    graph.AddEdge(new Edge(3, 5));
-    graph.AddEdge(new Edge(4, 5));
-    graph.AddEdge(new Edge(4, 6));
-    graph.AddEdge(new Edge(5, 6));
+    graphPath.AddEdge(new Edge(1, 2));
+    graphPath.AddEdge(new Edge(1, 3));
+    graphPath.AddEdge(new Edge(2, 4));
+    graphPath.AddEdge(new Edge(3, 4));
+    graphPath.AddEdge(new Edge(3, 5));
+    graphPath.AddEdge(new Edge(4, 5));
+    graphPath.AddEdge(new Edge(4, 6));
+    graphPath.AddEdge(new Edge(5, 6));
     int iPath = graphPath.FindMinimumPath(1, 4);
     std::cout << iPath;
 #endif
