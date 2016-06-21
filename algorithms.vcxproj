@@ -147,12 +147,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="algorithms.cpp" />
+    <ClCompile Include="directed_graph.cpp" />
     <ClCompile Include="edge.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
+    <ClInclude Include="directed_graph.h" />
     <ClInclude Include="edge.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="sort.h" />

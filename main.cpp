@@ -2,6 +2,7 @@
 #include "algorithms.h"
 #include "sort.h"
 #include "graph.h"
+#include "directed_graph.h"
 
 void MinimumCutTest();
 void MinimumPathTest();

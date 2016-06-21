@@ -30,7 +30,6 @@ public:
     void AddEdge(Edge *edge);
     void AddEdge(int iVert1, int iVert2); //this one breaks hierchy structure, what if it is called within DirectedWeightGraph ?
     void AddVertex(const std::vector<int> &vAdjency);
-    
 public:
     //these should be "working horses" of the class, 
     //actual usage should be done by user routines which use them for common purposes
@@ -46,9 +45,3 @@ protected:
     GraphType m_GraphType;
 };
 
-class DirectedGraph : public Graph
-{
-public:
-    std::map<int, int> TopologicalOrder() const;
-    bool IsAcyclic() const;
-};

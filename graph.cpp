@@ -45,8 +45,6 @@ void Graph::AddVertex(const std::vector<int> &vAdjency)
     {
         AddUniqueEdge(new Edge(m_iNumVertex + 1, iVertex));
     });
-
-  //  ++m_iNumVertex;
 }
 
 void Graph::AddUniqueEdge(Edge *edge)
@@ -79,16 +77,12 @@ void Graph::AddUniqueEdge(Edge *edge)
         delete edge;
         edge = nullptr;
     }
-
-  
-
 }
 
 void Graph::AddUniqueVertex(int iNode)
 {
     
 }
-
 
 //TODO: check if size of the graph was not changed, if it was not return cashed value
 //TODO: add ability to add stand-alone nodes(which is not connected between each other)
@@ -237,59 +231,3 @@ void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workF
 //will always be 1, otherwise it could be some arbitrary value) 
 //if graph not directed than path will always be walkable, otherwise it will depend on direction
 
-std::map<int, int> DirectedGraph::TopologicalOrder() const
-{
-    std::map<int, int> mOrder;
-
-    //find sink vertix, vertix which has not outgoing arcs
-    //direction should be taken to consideration
-    int iFirstNode = m_iNumVertex; //currently assuming first node equals 1;
-    int iCurrLabel = m_iNumVertex;
-    DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge) -> void
-    {
-        EdgeDirection direction = edge->Direction();
-        std::pair<std::map<int, int>::iterator, bool> retVal;
-        //if (direction == EdgeDirection::FIRST_TO_SECOND)
-        //    retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
-        //else
-        //    retVal = mOrder.insert(std::make_pair(edge->First(), iCurrLabel));
-
-
-        retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
-        if (retVal.second)
-            --iCurrLabel;
-
-        retVal = mOrder.insert(std::make_pair(edge->First(), iCurrLabel));
-        if (retVal.second)
-            --iCurrLabel;
-
-    });
-
-    return std::move(mOrder);
-}
-
-bool DirectedGraph::IsAcyclic() const
-{
-    int iFirstNode = 1;
-    bool bIsCyclic = false;;
-    std::vector<int> exploredNodes;
-
-    DFS(iFirstNode, [&bIsCyclic, &exploredNodes](std::shared_ptr<Edge> edge) -> void
-    {
-        exploredNodes.push_back(edge->First());
-        auto direction = edge->Direction();
-        if (direction == EdgeDirection::FIRST_TO_SECOND)
-        {
-            if (std::find(exploredNodes.begin(), exploredNodes.end(), edge->Second()) !=
-                std::end(exploredNodes))
-            {
-                bIsCyclic = true;
-            }
-        }
-    });
-
-    return !bIsCyclic;
-}
-//TODO: 
-// implement check whether graph is acyclic
-//implement topological ordering
