@@ -1,6 +1,16 @@
 #include "directed_graph.h"
 
 
+
+std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
+{
+    std::vector<std::vector<int>> vSCC;
+
+    //DFS()
+
+    return std::move(vSCC);
+}
+
 std::map<int, int> DirectedGraph::TopologicalOrder() const
 {
     std::map<int, int> mOrder;
