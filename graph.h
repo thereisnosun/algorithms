@@ -18,6 +18,17 @@ enum class GraphType
     DIRECTED_WEIGHT
 };
 
+
+template <class Type>
+struct Node
+{
+    Type value;
+    const Type& operator() () const
+    {
+        return value;
+    }
+};
+
 class Graph
 {
 public:
