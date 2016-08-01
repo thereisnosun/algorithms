@@ -65,7 +65,7 @@ void Graph::AddUniqueEdge(Edge *edge)
 
     if (itFind == std::end(m_vEdges))
     {
-        //check for memory leak
+        //TODO: check for memory leak
         m_sVertex.insert(edge->Second());
         m_sVertex.insert(edge->First());
         m_iNumVertex = static_cast<int>(m_sVertex.size());
@@ -224,6 +224,12 @@ void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workF
         }
 
     }
+}
+
+
+void Graph::StrongConnectedComp() const
+{
+    //TODO: implement
 }
 //NOTE: can storing neighbours of each edge  help improve productivity ?
 
