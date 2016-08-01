@@ -121,7 +121,6 @@ namespace Sort
             return std::move(vRes);
         }
 
-        //TODO: difference between shared_ptr and unique_ptr
         template <class Type>
         static std::unique_ptr<std::vector<Type>> Merge(std::unique_ptr<std::vector<Type>> pVec1, std::unique_ptr<std::vector<Type>> pVec2)
         {
@@ -158,8 +157,6 @@ namespace Sort
             return std::move(resVector);
         }
 
-
-        //TODO: refactor - reduce arguments number
         template <class T>
         static void QuickSort(T &first, T &last, int left, int right, T oldFirst, T invalidIt)
         {

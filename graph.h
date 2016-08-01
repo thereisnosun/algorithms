@@ -39,7 +39,7 @@ struct Result
 class Graph
 {
 public:
-    Graph()
+	Graph():m_GraphType(GraphType::NORMAL)
     {
     }
     Graph(const std::vector<std::vector<int>> &vAdjMatrix);
