@@ -6,7 +6,13 @@ std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
 {
     std::vector<std::vector<int>> vSCC;
 
-    //DFS()
+    //TODO:
+        //1. Reverse directed graph
+        //2. run DFS on Grev(go backwards, instead of copying whole graph).
+        // finishing time
+        //3. run DFS on original graph
+        //process nodes in decreasing order of finishing times
+
 
     return std::move(vSCC);
 }

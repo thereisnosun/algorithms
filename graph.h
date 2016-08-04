@@ -45,7 +45,6 @@ public:
     Graph(const std::vector<std::vector<int>> &vAdjMatrix);
     size_t FindMinimumCut() const;
     int FindMinimumPath(int iNode1, int iNode2) const;
-    void StrongConnectedComp() const;
     void AddEdge(Edge *edge);
     void AddEdge(int iVert1, int iVert2); //this one breaks hierchy structure, what if it is called within DirectedWeightGraph ?
     void AddVertex(const std::vector<int> &vAdjency);

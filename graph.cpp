@@ -226,11 +226,6 @@ void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workF
     }
 }
 
-
-void Graph::StrongConnectedComp() const
-{
-    //TODO: implement
-}
 //NOTE: can storing neighbours of each edge  help improve productivity ?
 
 //define some template structure which will receive result from the lambdas, (e.g. if graph not-weight then weight edge
