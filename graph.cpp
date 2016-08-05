@@ -134,10 +134,11 @@ int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
     std::map<int, int> mDistances;
     mDistances.insert(std::make_pair(iNode1, 0));
-    BFS(iNode1, [&mDistances](int iNode1, int Node2) -> void
+    BFS(iNode1, [&mDistances](int iNode1, int Node2) -> bool
     {
         int iCurrDist = mDistances.at(iNode1);
         mDistances.insert(std::make_pair(Node2, ++iCurrDist));
+        return true; //ugly, but shall work
     });
 
     int  iDistance = mDistances.at(iNode2);
@@ -186,7 +187,7 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
     }
 }
 
-void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workFunc) const
+void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc) const
 {
     std::stack<int> checkStack;
     std::set<int> markedNodes;
@@ -212,15 +213,28 @@ void Graph::DFS(int iNode, std::function<void(std::shared_ptr<Edge> edge)> workF
             {
                 iNewVertex = curEdge->First();
             }
+
+
             if (iNewVertex != -1)
             {
                 auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
                 if (itFind == std::end(markedNodes))
                 {
-                    checkStack.push(iNewVertex);
-                    workFunc(curEdge);
+                    if (curEdge->Direction() == EdgeDirection::UNDIRECTED)
+                    {
+                        checkStack.push(iNewVertex);
+                        workFunc(curEdge, iNewVertex);
+                    }
+                    else
+                    {
+                        if (workFunc(curEdge, iNewVertex))
+                        {
+                            checkStack.push(iNewVertex);
+                        }
+                    }
                 }
             }
+
         }
 
     }

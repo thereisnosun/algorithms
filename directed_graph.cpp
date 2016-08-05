@@ -12,11 +12,34 @@ std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
         // finishing time
         //3. run DFS on original graph
         //process nodes in decreasing order of finishing times
+    int iStartNode = 0; //assuming we are starting from the very first node
+    DFS(iStartNode, [](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
+    {
+        EdgeDirection direction = edge->Direction();
 
+        bool bIsAllowed = false;
+        if (direction == EdgeDirection::FIRST_TO_SECOND)
+        {
+            if (edge->Second() == iCurrNode)
+            {//reverse order
+                bIsAllowed = true;
+            }
+        }
+        else
+        {
+            if (edge->First() == iCurrNode)
+            {//reverse order
+                bIsAllowed = true;
+            }
+        }
+        return true;
+
+    });
 
     return std::move(vSCC);
 }
 
+//TODO: there is a bug here
 std::map<int, int> DirectedGraph::TopologicalOrder() const
 {
     std::map<int, int> mOrder;
@@ -25,7 +48,7 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
     //direction should be taken to consideration
     int iFirstNode = m_iNumVertex; //currently assuming first node equals 1;
     int iCurrLabel = m_iNumVertex;
-    DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge) -> void
+    DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
     {
         EdgeDirection direction = edge->Direction();
         std::pair<std::map<int, int>::iterator, bool> retVal;
@@ -43,6 +66,8 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
         if (retVal.second)
             --iCurrLabel;
 
+        return true;
+
     });
 
     return std::move(mOrder);
@@ -54,7 +79,7 @@ bool DirectedGraph::IsAcyclic() const
     bool bIsCyclic = false;;
     std::vector<int> exploredNodes;
 
-    DFS(iFirstNode, [&bIsCyclic, &exploredNodes](std::shared_ptr<Edge> edge) -> void
+    DFS(iFirstNode, [&bIsCyclic, &exploredNodes](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
     {
         exploredNodes.push_back(edge->First());
         auto direction = edge->Direction();
@@ -66,9 +91,8 @@ bool DirectedGraph::IsAcyclic() const
                 bIsCyclic = true;
             }
         }
+        return true;
     });
 
     return !bIsCyclic;
 }
-//TODO: 
-// implement check whether graph is acyclic
