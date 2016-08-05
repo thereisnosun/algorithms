@@ -32,7 +32,9 @@ std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
                 bIsAllowed = true;
             }
         }
-        return true;
+
+
+        return bIsAllowed;
 
     });
 

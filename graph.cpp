@@ -134,11 +134,10 @@ int Graph::FindMinimumPath(int iNode1, int iNode2) const
 {
     std::map<int, int> mDistances;
     mDistances.insert(std::make_pair(iNode1, 0));
-    BFS(iNode1, [&mDistances](int iNode1, int Node2) -> bool
+    BFS(iNode1, [&mDistances](int iNode1, int Node2) -> void
     {
         int iCurrDist = mDistances.at(iNode1);
         mDistances.insert(std::make_pair(Node2, ++iCurrDist));
-        return true; //ugly, but shall work
     });
 
     int  iDistance = mDistances.at(iNode2);
