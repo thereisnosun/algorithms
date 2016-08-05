@@ -20,6 +20,27 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+
+void SCCTest()
+{
+#ifdef  _MSC_PLATFORM_TOOLSET_v140
+    DirectedGraph directedGraph;
+    directedGraph.AddEdge(new DirectedEdge(1, 7, false));
+    directedGraph.AddEdge(new DirectedEdge(1, 4, true));
+    directedGraph.AddEdge(new DirectedEdge(4, 7, true));
+    directedGraph.AddEdge(new DirectedEdge(7, 9, false));
+    directedGraph.AddEdge(new DirectedEdge(9, 6, false));
+    directedGraph.AddEdge(new DirectedEdge(6, 5, false));
+    directedGraph.AddEdge(new DirectedEdge(5, 9, false));
+    directedGraph.AddEdge(new DirectedEdge(6, 8, false));
+    directedGraph.AddEdge(new DirectedEdge(8, 3, true));
+    directedGraph.AddEdge(new DirectedEdge(3, 2, true));
+    directedGraph.AddEdge(new DirectedEdge(2, 8, true));
+    auto compSCC = directedGraph.ComputeSCC();
+#else
+#endif
+}
+
 void TopologicalOrderTest()
 {
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
