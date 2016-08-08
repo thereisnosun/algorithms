@@ -2,9 +2,8 @@
 
 
 
-std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
+const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC() 
 {
-    std::vector<std::vector<int>> vSCC;
 
     //TODO:
         //1. Reverse directed graph
@@ -40,7 +39,7 @@ std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
 
     });
 
-    return std::move(vSCC);
+    return m_vSCC;
 }
 
 //TODO: there is a bug here

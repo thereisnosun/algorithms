@@ -6,7 +6,9 @@ class DirectedGraph : public Graph
 {
 public:
     std::map<int, int> TopologicalOrder() const;
-    std::vector<std::vector<int>> ComputeSCC() const;
+    const std::vector<DirectedGraph>& ComputeSCC();
     bool IsAcyclic() const;
+private:
+    std::vector<DirectedGraph> m_vSCC;
 };
 
