@@ -12,8 +12,10 @@ std::vector<std::vector<int>> DirectedGraph::ComputeSCC() const
         // finishing time
         //3. run DFS on original graph
         //process nodes in decreasing order of finishing times
-    int iStartNode = 0; //assuming we are starting from the very first node
-    DFS(iStartNode, [](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
+    int iStartNode = 1; //assuming we are starting from the very first node
+    std::map<int, int> mFinishTimes;
+    int iCounter = 1;
+    DFS(iStartNode, [&mFinishTimes](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
     {
         EdgeDirection direction = edge->Direction();
 
@@ -53,13 +55,23 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
     DFS(iFirstNode, [&mOrder, &iCurrLabel](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
     {
         EdgeDirection direction = edge->Direction();
+        bool bIsAllowed = false;
+        if (direction == EdgeDirection::FIRST_TO_SECOND)
+        {
+            if (edge->First() == iCurrNode)
+            {//normal order
+                bIsAllowed = true;
+            }
+        }
+        else
+        {
+            if (edge->Second() == iCurrNode)
+            {//normal order
+                bIsAllowed = true;
+            }
+        }
+
         std::pair<std::map<int, int>::iterator, bool> retVal;
-        //if (direction == EdgeDirection::FIRST_TO_SECOND)
-        //    retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
-        //else
-        //    retVal = mOrder.insert(std::make_pair(edge->First(), iCurrLabel));
-
-
         retVal = mOrder.insert(std::make_pair(edge->Second(), iCurrLabel));
         if (retVal.second)
             --iCurrLabel;
@@ -68,7 +80,7 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
         if (retVal.second)
             --iCurrLabel;
 
-        return true;
+        return bIsAllowed;
 
     });
 
