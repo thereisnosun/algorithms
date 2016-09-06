@@ -10,12 +10,14 @@ void TopologicalOrderTest();
 
 void MergeSortTest();
 void QuickSortTest();
+void SCCTest();
 
 
 int main(int argc, char *argv[])
 {
     //MinimumPathTest();
     TopologicalOrderTest();
+    //SCCTest();
 
 	return 0;
 }
