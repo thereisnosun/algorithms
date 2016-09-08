@@ -53,7 +53,7 @@ private:
 class DirectedEdge: virtual public Edge
 {
 public:
-    DirectedEdge(int iFirst, int iSecond, bool bDirection);
+    DirectedEdge(int iFirst, int iSecond, const EdgeDirection &direction);
 };
 
 class WeightEdge: virtual  public Edge
@@ -71,5 +71,5 @@ private:
 class DirectedWeightEdge: public DirectedEdge, public WeightEdge
 {
 public:
-    DirectedWeightEdge(int iOne, int iTwo, bool bDirection, int iWeight);
+    DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &direction, int iWeight);
 };

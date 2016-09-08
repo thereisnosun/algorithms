@@ -12,13 +12,10 @@ m_bFirstLast - boolean var which determins direction
 if true - then first node -> second node
 if false - then first node <- second node
 */
-DirectedEdge::DirectedEdge(int iOne, int iTwo, bool bFirstToSecond) :
+DirectedEdge::DirectedEdge(int iOne, int iTwo, const EdgeDirection &direction) :
     Edge(iOne, iTwo)
 {
-    if (bFirstToSecond)
-        m_direction = EdgeDirection::FIRST_TO_SECOND;
-    else
-        m_direction = EdgeDirection::SECOND_TO_FIRST;
+    m_direction = direction;
 }
 
 WeightEdge::WeightEdge(int iOne, int iTwo, int iWeight) :
@@ -27,8 +24,8 @@ WeightEdge::WeightEdge(int iOne, int iTwo, int iWeight) :
 
 }
 
-DirectedWeightEdge::DirectedWeightEdge(int iOne, int iTwo, bool bDirection, int iWeight) :
-    Edge(iOne, iTwo), DirectedEdge(iOne, iTwo, bDirection), WeightEdge(iOne, iTwo, iWeight)
+DirectedWeightEdge::DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &direction, int iWeight) :
+    Edge(iOne, iTwo), DirectedEdge(iOne, iTwo, direction), WeightEdge(iOne, iTwo, iWeight)
 {
 
 }
