@@ -31,10 +31,10 @@ void SCCTest()
     directedGraph.AddEdge(new DirectedEdge(9, 6, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(6, 5, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(5, 9, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(6, 8, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(8, 3, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(3, 2, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(2, 8, EdgeDirection::FIRST_TO_SECOND));
+    directedGraph.AddEdge(new DirectedEdge(6, 8, EdgeDirection::SECOND_TO_FIRST));
     auto compSCC = directedGraph.ComputeSCC();
 #else
 #endif

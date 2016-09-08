@@ -1,9 +1,10 @@
+#include "graph.h"
+#include "algorithms.h"
+
 #include <algorithm>
 #include <ctime>
 #include <queue>
 #include <stack>
-#include "graph.h"
-
 //on the current state of implementation lets assume graph can have duplicate edeges
 Graph::Graph(const std::vector<std::vector<int>> &vAdjencyMatrix)
 {
@@ -186,13 +187,19 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
     }
 }
 
+
+#include <iostream>
+
 void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc) const
 {
     std::stack<int> checkStack;
-    std::set<int> markedNodes;
+    static std::set<int> markedNodes;
 
+    static std::map<int, int> mFinishTimes;
+    static int iFinishCounter = 1;
     checkStack.push(iNode);
     markedNodes.insert(iNode);
+    std::cout << "Exploring " << iNode << "\n";
     while (!checkStack.empty())
     {
         int iCurrVertex = checkStack.top();
@@ -213,23 +220,24 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
                 iNewVertex = curEdge->First();
             }
 
-
             if (iNewVertex != -1)
             {
                 auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
                 if (itFind == std::end(markedNodes))
                 {
-                    if (curEdge->Direction() == EdgeDirection::UNDIRECTED)
+                    if (workFunc(curEdge, iNewVertex))
                     {
+                        std::cout << "Exploring " << iNewVertex << "\n";
                         checkStack.push(iNewVertex);
-                        workFunc(curEdge, iNewVertex);
                     }
-                    else
+                }
+                else
+                {
+                    if (!checkStack.empty())
                     {
-                        if (workFunc(curEdge, iNewVertex))
-                        {
-                            checkStack.push(iNewVertex);
-                        }
+                        mFinishTimes.insert(std::make_pair(iNewVertex, iFinishCounter));
+                        ++iFinishCounter;
+                        //TODO: compute finishing time
                     }
                 }
             }
@@ -237,6 +245,10 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
         }
 
     }
+    int iSize = mFinishTimes.size();
+    //std::cout << iSize;
+    //std::cout << "From DFS:\n";
+    //Algo::PrintMap(mFinishTimes);
 }
 
 //NOTE: can storing neighbours of each edge  help improve productivity ?

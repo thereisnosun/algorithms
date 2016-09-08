@@ -1,3 +1,4 @@
+#include "algorithms.h"
 #include "directed_graph.h"
 
 
@@ -11,35 +12,60 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
     //process nodes in decreasing order of finishing times
     int iStartNode = m_iNumVertex; //starting from very last node
     std::map<int, int> mFinishTimes;
-    int iCounter = 0;
-    DFS(iStartNode,[&mFinishTimes, &iCounter](std::shared_ptr<Edge> edge, /*node to which we are going*/int iCurrNode) -> bool
+    std::set<int> vExploredNodes;
+    int iCounter = 1;
+    
+    do
     {
-        EdgeDirection direction = edge->Direction();
-
-        bool bIsAllowed = false;
-        if (direction == EdgeDirection::FIRST_TO_SECOND)
+        vExploredNodes.insert(iStartNode);
+        DFS(iStartNode, [&mFinishTimes, &vExploredNodes, &iCounter](std::shared_ptr<Edge> edge,
+            /*node to which we are going*/int iCurrNode) -> bool
         {
-            if (edge->First() == iCurrNode)
-            {//reverse order
-                bIsAllowed = true;
+            EdgeDirection direction = edge->Direction();
+
+            bool bIsAllowed = false;
+            if (direction == EdgeDirection::FIRST_TO_SECOND)
+            {
+                if (edge->First() == iCurrNode)
+                {//reverse order
+                    bIsAllowed = true;
+                }
             }
-        }
-        else
-        {
-            if (edge->Second() == iCurrNode)
-            {//reverse order
-                bIsAllowed = true;
+            else
+            {
+                if (edge->Second() == iCurrNode)
+                {//reverse order
+                    bIsAllowed = true;
+                }
             }
-        }
 
-        if (!bIsAllowed)
+            if (bIsAllowed)
+            {
+                vExploredNodes.insert(iCurrNode);
+            }
+
+            auto itFind = std::find(vExploredNodes.begin(), vExploredNodes.end(), iCurrNode);
+            if (itFind != std::end(vExploredNodes))
+            {
+                int iFinishNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
+                mFinishTimes.insert(std::make_pair(iFinishNode, iCounter));
+                ++iCounter;
+            }
+
+
+            return bIsAllowed;
+        });
+
+        auto itFind = std::end(vExploredNodes);
+        do
         {
-            ++iCounter;
+            --iStartNode;
+            itFind = std::find(vExploredNodes.begin(), vExploredNodes.end(), iStartNode);
+        } while (itFind != std::end(vExploredNodes));
 
-        }
+    } while (iStartNode > 0);
 
-        return bIsAllowed;
-    });
+    Algo::PrintMap(mFinishTimes);
 
     return m_vSCC;
 }
