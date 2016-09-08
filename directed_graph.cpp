@@ -1,42 +1,44 @@
 #include "directed_graph.h"
 
 
-
 const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC() 
 {
-
     //TODO:
-        //1. Reverse directed graph
-        //2. run DFS on Grev(go backwards, instead of copying whole graph).
-        // finishing time
-        //3. run DFS on original graph
-        //process nodes in decreasing order of finishing times
-    int iStartNode = 1; //assuming we are starting from the very first node
+    //1. Reverse directed graph
+    //2. run DFS on Grev(go backwards, instead of copying whole graph).
+    // finishing time
+    //3. run DFS on original graph
+    //process nodes in decreasing order of finishing times
+    int iStartNode = m_iNumVertex; //starting from very last node
     std::map<int, int> mFinishTimes;
-    int iCounter = 1;
-    DFS(iStartNode, [&mFinishTimes](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
+    int iCounter = 0;
+    DFS(iStartNode,[&mFinishTimes, &iCounter](std::shared_ptr<Edge> edge, /*node to which we are going*/int iCurrNode) -> bool
     {
         EdgeDirection direction = edge->Direction();
 
         bool bIsAllowed = false;
         if (direction == EdgeDirection::FIRST_TO_SECOND)
         {
-            if (edge->Second() == iCurrNode)
+            if (edge->First() == iCurrNode)
             {//reverse order
                 bIsAllowed = true;
             }
         }
         else
         {
-            if (edge->First() == iCurrNode)
+            if (edge->Second() == iCurrNode)
             {//reverse order
                 bIsAllowed = true;
             }
         }
 
+        if (!bIsAllowed)
+        {
+            ++iCounter;
+
+        }
 
         return bIsAllowed;
-
     });
 
     return m_vSCC;
@@ -57,14 +59,14 @@ std::map<int, int> DirectedGraph::TopologicalOrder() const
         bool bIsAllowed = false;
         if (direction == EdgeDirection::FIRST_TO_SECOND)
         {
-            if (edge->First() == iCurrNode)
+            if (edge->Second() == iCurrNode)
             {//normal order
                 bIsAllowed = true;
             }
         }
         else
         {
-            if (edge->Second() == iCurrNode)
+            if (edge->First() == iCurrNode)
             {//normal order
                 bIsAllowed = true;
             }
