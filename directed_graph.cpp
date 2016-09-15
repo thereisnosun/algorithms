@@ -1,24 +1,40 @@
 #include "algorithms.h"
 #include "directed_graph.h"
 
+#include <algorithm>
+
+
+bool operator==(const NodeFinish &comparedNode1, const NodeFinish &comparedNode2)
+{
+    return comparedNode1.m_iNode == comparedNode2.m_iNode;
+}
+
+bool operator==(const NodeFinish &comparedNode1, int iNode)
+{
+    return comparedNode1.m_iNode == iNode;
+}
+bool operator<(const NodeFinish &comparedNode1, const NodeFinish &comparedNode2)
+{
+    return comparedNode1.m_iNode < comparedNode2.m_iNode;
+}
 
 const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC() 
 {
     //TODO:
     //1. Reverse directed graph
-    //2. run DFS on Grev(go backwards, instead of copying whole graph).
-    // finishing time
-    //3. run DFS on original graph
-    //process nodes in decreasing order of finishing times
+    //2. run DFS on Grev(go backwards, instead of copying whole graph).finishing time
+    //3. run DFS on original graph process nodes in decreasing order of finishing times
     int iStartNode = m_iNumVertex; //starting from very last node
     std::map<int, int> mFinishTimes;
-    std::set<int> vExploredNodes;
-    int iCounter = 1;
-    
+    std::set<NodeFinish> vExploredNodes;
+
+    int iProcessedOrder = 1;
     do
     {
-        vExploredNodes.insert(iStartNode);
-        DFS(iStartNode, [&mFinishTimes, &vExploredNodes, &iCounter](std::shared_ptr<Edge> edge,
+        vExploredNodes.insert(NodeFinish(iStartNode, iProcessedOrder++));
+        std::set<int> vCloseVertexs;
+        
+        DFS(iStartNode, [&](std::shared_ptr<Edge> edge,
             /*node to which we are going*/int iCurrNode) -> bool
         {
             EdgeDirection direction = edge->Direction();
@@ -39,22 +55,21 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
                 }
             }
 
+            int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
+            static int iLeadNode = iExploringNode;
+
+            if (iLeadNode != iExploringNode)
+            {
+                NodeFinish processed(iLeadNode, iProcessedOrder);
+                iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes);
+                iLeadNode = iExploringNode;
+            }
             if (bIsAllowed)
-            {
-                vExploredNodes.insert(iCurrNode);
-            }
-
-            auto itFind = std::find(vExploredNodes.begin(), vExploredNodes.end(), iCurrNode);
-            if (itFind != std::end(vExploredNodes))
-            {
-                int iFinishNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
-                mFinishTimes.insert(std::make_pair(iFinishNode, iCounter));
-                ++iCounter;
-            }
-
+                vCloseVertexs.insert(iCurrNode);
 
             return bIsAllowed;
         });
+        //TODO: here call one more time check finish time routine and then set other finishing times
 
         auto itFind = std::end(vExploredNodes);
         do
@@ -65,9 +80,46 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
 
     } while (iStartNode > 0);
 
+
     Algo::PrintMap(mFinishTimes);
 
     return m_vSCC;
+}
+
+int DirectedGraph::CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFinish> &vExploredNodes, const NodeFinish &processed,
+                                    std::map<int, int> &mFinishTimes) const
+{
+    bool bIsMoreVertex = false;
+    static int iFinishCounter = 1;
+
+    std::for_each(vCloseVertexs.begin(), vCloseVertexs.end(), [&bIsMoreVertex, &vExploredNodes](int iVertex) -> void
+    {
+        if (std::find(vExploredNodes.begin(), vExploredNodes.end(), iVertex) == std::end(vExploredNodes))
+        {
+            bIsMoreVertex = true;
+        }
+    });
+
+    int iProcessedOrder = processed.m_iProcessedOrder;
+    if (vExploredNodes.insert(processed).second)
+        ++iProcessedOrder;
+
+    if (!bIsMoreVertex)
+    {
+        auto itFind = std::find(vExploredNodes.begin(), vExploredNodes.end(), processed);
+        if (itFind != std::end(vExploredNodes))
+        {
+            if (mFinishTimes.find(processed.m_iNode) == std::end(mFinishTimes))
+            {
+                std::cout << "Inserting... " << processed.m_iNode << "=" << iFinishCounter << "\n";
+                mFinishTimes.insert(std::make_pair(processed.m_iNode, iFinishCounter));
+                ++iFinishCounter;
+            }
+        }
+    }
+
+    vCloseVertexs.clear();
+    return iProcessedOrder;
 }
 
 //TODO: there is a bug here

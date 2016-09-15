@@ -206,6 +206,7 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
         checkStack.pop();
 
         auto itRet = markedNodes.insert(iCurrVertex);
+        std::cout << "Exploring " << iCurrVertex << "\n";
         for (auto itCurr = m_vEdges.begin(); itCurr != m_vEdges.end(); ++itCurr)
         {
             auto curEdge = *itCurr;
@@ -230,17 +231,7 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
                 {
                     if (bIsPath)
                     {
-                        std::cout << "Exploring " << iNewVertex << "\n";
                         checkStack.push(iNewVertex);
-                    }
-                }
-                else
-                {
-                    if (!checkStack.empty())
-                    {
-                        mFinishTimes.insert(std::make_pair(iNewVertex, iFinishCounter));
-                        ++iFinishCounter;
-                        //TODO: compute finishing time
                     }
                 }
             }
