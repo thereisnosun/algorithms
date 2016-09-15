@@ -25,16 +25,16 @@ void SCCTest()
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
     DirectedGraph directedGraph;
     directedGraph.AddEdge(new DirectedEdge(1, 7, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(1, 4, EdgeDirection::SECOND_TO_FIRST));
+    directedGraph.AddEdge(new DirectedEdge(1, 4, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(4, 7, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(7, 9, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(9, 6, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(6, 5, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(5, 9, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(8, 3, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(3, 2, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(2, 8, EdgeDirection::FIRST_TO_SECOND));
     directedGraph.AddEdge(new DirectedEdge(6, 8, EdgeDirection::SECOND_TO_FIRST));
+    directedGraph.AddEdge(new DirectedEdge(6, 5, EdgeDirection::SECOND_TO_FIRST));
     auto compSCC = directedGraph.ComputeSCC();
 #else
 #endif

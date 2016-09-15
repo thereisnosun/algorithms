@@ -219,13 +219,16 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
             {
                 iNewVertex = curEdge->First();
             }
-
+  
+       //     std::cout << "Curvertex - " << iCurrVertex << "New vertex - " << iNewVertex << "\n";
+            
             if (iNewVertex != -1)
             {
                 auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
+                bool bIsPath = workFunc(curEdge, iNewVertex);
                 if (itFind == std::end(markedNodes))
                 {
-                    if (workFunc(curEdge, iNewVertex))
+                    if (bIsPath)
                     {
                         std::cout << "Exploring " << iNewVertex << "\n";
                         checkStack.push(iNewVertex);
@@ -247,7 +250,7 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
     }
     int iSize = mFinishTimes.size();
     //std::cout << iSize;
-    //std::cout << "From DFS:\n";
+    std::cout << "From DFS :\n";
     //Algo::PrintMap(mFinishTimes);
 }
 
