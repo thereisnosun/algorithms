@@ -14,7 +14,7 @@ struct NodeFinish
     friend bool operator==(const NodeFinish &comparedNode1, const NodeFinish &comparedNode2);
     friend bool operator==(const NodeFinish &comparedNode1, int iNode);
 };
-
+//sort by processed order, but compare by node numbers ?
 
 class DirectedGraph : public Graph
 {

@@ -18,6 +18,15 @@ bool operator<(const NodeFinish &comparedNode1, const NodeFinish &comparedNode2)
     return comparedNode1.m_iNode < comparedNode2.m_iNode;
 }
 
+//finish times relation is
+//node processing finish
+//9 -> 1          6 
+//6 -> 2          5
+//8 -> 4          4
+//2 -> 5          3
+//3 -> 6          2
+//5 -> 3          1
+
 const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC() 
 {
     //TODO:
@@ -29,6 +38,7 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
     std::set<NodeFinish> vExploredNodes;
 
     int iProcessedOrder = 1;
+    int iLeadNode = iStartNode;
     do
     {
         vExploredNodes.insert(NodeFinish(iStartNode, iProcessedOrder++));
@@ -56,8 +66,6 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
             }
 
             int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
-            static int iLeadNode = iExploringNode;
-
             if (iLeadNode != iExploringNode)
             {
                 NodeFinish processed(iLeadNode, iProcessedOrder);
@@ -69,7 +77,25 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
 
             return bIsAllowed;
         });
-        //TODO: here call one more time check finish time routine and then set other finishing times
+        
+        NodeFinish processed(iLeadNode, iProcessedOrder);
+        iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes);
+        // how to count other finishing nodes ?
+        //TODO: try to implement DFS with all book keeping inside
+        std::for_each(vExploredNodes.begin(), vExploredNodes.end(), 
+                      [&] (const NodeFinish &node) -> void
+        {
+            if (mFinishTimes.find(node.m_iNode) == std::end(mFinishTimes))
+            {
+
+            }
+        });
+
+        std::for_each(mFinishTimes.begin(), mFinishTimes.end(), 
+                      [](const std::pair <int, int> &finishTime) -> void
+        {
+//            if (finishTime.second == 
+        });
 
         auto itFind = std::end(vExploredNodes);
         do
@@ -92,7 +118,8 @@ int DirectedGraph::CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFi
     bool bIsMoreVertex = false;
     static int iFinishCounter = 1;
 
-    std::for_each(vCloseVertexs.begin(), vCloseVertexs.end(), [&bIsMoreVertex, &vExploredNodes](int iVertex) -> void
+    std::for_each(vCloseVertexs.begin(), vCloseVertexs.end(), 
+                  [&bIsMoreVertex, &vExploredNodes](int iVertex) -> void
     {
         if (std::find(vExploredNodes.begin(), vExploredNodes.end(), iVertex) == std::end(vExploredNodes))
         {
