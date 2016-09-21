@@ -24,7 +24,7 @@ public:
     bool IsAcyclic() const;
 private:
     int CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFinish> &vExploredNodes, const NodeFinish &processed,
-                         std::map<int, int> &mFinishTimes) const;
+                         std::map<int, int> &mFinishTimes, int &iFinishCounter) const;
     bool IsNodeExplored(const std::set<NodeFinish> &vExploredNodes, int iNode) const;
 private:
     std::vector<DirectedGraph> m_vSCC;

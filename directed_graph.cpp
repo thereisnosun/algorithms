@@ -15,7 +15,7 @@ bool operator==(const NodeFinish &comparedNode1, int iNode)
 }
 bool operator<(const NodeFinish &comparedNode1, const NodeFinish &comparedNode2)
 {
-    return comparedNode1.m_iProcessedOrder < comparedNode2.m_iProcessedOrder;
+    return comparedNode1.m_iProcessedOrder > comparedNode2.m_iProcessedOrder;
 }
 
 //finish times relation is
@@ -39,11 +39,10 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
 
     int iProcessedOrder = 1;
     int iLeadNode = iStartNode;
+    int iFinishCounter = 1;
     do
     {
-      //  vExploredNodes.insert(NodeFinish(iStartNode, iProcessedOrder++));
         std::set<int> vCloseVertexs;
-        
         DFS(iStartNode, [&](std::shared_ptr<Edge> edge,
             /*node to which we are going*/int iCurrNode) -> bool
         {
@@ -69,7 +68,7 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
             if (iLeadNode != iExploringNode)
             {
                 NodeFinish processed(iLeadNode, iProcessedOrder);
-                iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes);
+                iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes, iFinishCounter);
                 iLeadNode = iExploringNode;
             }
             if (bIsAllowed)
@@ -79,23 +78,14 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
         });
         
         NodeFinish processed(iLeadNode, iProcessedOrder);
-        iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes);
-        // how to count other finishing nodes ?
-        //TODO: try to implement DFS with all book keeping inside
-
+        iProcessedOrder = CheckFinishTime(vCloseVertexs, vExploredNodes, processed, mFinishTimes, iFinishCounter);
         std::for_each(vExploredNodes.begin(), vExploredNodes.end(), 
                       [&] (const NodeFinish &node) -> void
         {
             if (mFinishTimes.find(node.m_iNode) == std::end(mFinishTimes))
             {
-
+                mFinishTimes.insert(std::make_pair(node.m_iNode, iFinishCounter++));
             }
-        });
-
-        std::for_each(mFinishTimes.begin(), mFinishTimes.end(), 
-                      [](const std::pair <int, int> &finishTime) -> void
-        {
-//            if (finishTime.second == 
         });
 
         auto itFind = std::end(vExploredNodes);
@@ -110,7 +100,7 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
     Algo::PrintMap(mFinishTimes);
 
 
-    //assuminng there is a map with finishing times already
+    
 
 
     return m_vSCC;
@@ -125,20 +115,21 @@ bool DirectedGraph::IsNodeExplored(const std::set<NodeFinish> &vExploredNodes, i
         return iNode == node.m_iNode;
     });
 
-    return itFind == std::end(vExploredNodes);
+    return itFind != std::end(vExploredNodes);
 }
 
+//TODO: refactor this function
 int DirectedGraph::CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFinish> &vExploredNodes, const NodeFinish &processed,
-                                    std::map<int, int> &mFinishTimes) const
+                                    std::map<int, int> &mFinishTimes, int &iFinishCounter) const
 {
     bool bIsMoreVertex = false;
-    static int iFinishCounter = 1;
+
 
     std::for_each(vCloseVertexs.begin(), vCloseVertexs.end(), 
                   [&bIsMoreVertex, &vExploredNodes, this](int iVertex) -> void
     {
     
-        if (IsNodeExplored(vExploredNodes, iVertex))
+        if (!IsNodeExplored(vExploredNodes, iVertex))
         {
             bIsMoreVertex = true;
         }
@@ -151,7 +142,7 @@ int DirectedGraph::CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFi
     if (!bIsMoreVertex)
     {
         auto itFind = std::find(vExploredNodes.begin(), vExploredNodes.end(), processed);
-        if (!IsNodeExplored(vExploredNodes, processed.m_iNode))
+        if (IsNodeExplored(vExploredNodes, processed.m_iNode))
         {
             if (mFinishTimes.find(processed.m_iNode) == std::end(mFinishTimes))
             {
