@@ -19,6 +19,11 @@ struct NodeFinish
 class DirectedGraph : public Graph
 {
 public:
+    DirectedGraph()
+    {
+        m_GraphType = GraphType::DIRECTED;
+    }
+
     std::map<int, int> TopologicalOrder() const;
     const std::vector<DirectedGraph>& ComputeSCC();
     bool IsAcyclic() const;

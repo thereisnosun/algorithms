@@ -190,13 +190,14 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
 
 #include <iostream>
 
-void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc) const
+void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc, bool bIsNewSearch) const
 {
     std::stack<int> checkStack;
     static std::set<int> markedNodes;
 
-    static std::map<int, int> mFinishTimes;
-    static int iFinishCounter = 1;
+    if (bIsNewSearch)
+        markedNodes.clear();
+
     checkStack.push(iNode);
     markedNodes.insert(iNode);
     std::cout << "Exploring " << iNode << "\n";
@@ -220,9 +221,7 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
             {
                 iNewVertex = curEdge->First();
             }
-  
-       //     std::cout << "Curvertex - " << iCurrVertex << "New vertex - " << iNewVertex << "\n";
-            
+           
             if (iNewVertex != -1)
             {
                 auto itFind = std::find(markedNodes.begin(), markedNodes.end(), iNewVertex);
@@ -239,14 +238,9 @@ void Graph::DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iC
         }
 
     }
-    int iSize = mFinishTimes.size();
-    //std::cout << iSize;
-    std::cout << "From DFS :\n";
-    //Algo::PrintMap(mFinishTimes);
 }
 
 //NOTE: can storing neighbours of each edge  help improve productivity ?
-
 //define some template structure which will receive result from the lambdas, (e.g. if graph not-weight then weight edge
 //will always be 1, otherwise it could be some arbitrary value) 
 //if graph not directed than path will always be walkable, otherwise it will depend on direction

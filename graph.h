@@ -52,7 +52,7 @@ public:
     //these should be "working horses" of the class, 
     //actual usage should be done by user routines which use them for common purposes
     void BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc) const;
-    void DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc) const;
+    void DFS(int iNode, std::function<bool(std::shared_ptr<Edge> edge, int iCurrentNode)> workFunc, bool bIsNewSearch = false) const;
 private:
     void AddUniqueEdge(Edge *edge);
     void AddUniqueVertex(int iVertex);

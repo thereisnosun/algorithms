@@ -72,38 +72,60 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
 
     } while (iStartNode > 0);
 
+    //key = node name, value = finish time
     Algo::PrintMap(mFinishTimes);
+    std::map<int, int> mNodeFinish; 
+    std::for_each(mFinishTimes.begin(), mFinishTimes.end(), [&mNodeFinish](const std::pair<int, int> &finishTime) -> void
+    {
+        mNodeFinish.insert(std::make_pair(finishTime.second, finishTime.first));
+    });
 
     //second pass of DFS to compute actual SCC
-    vExploredNodes.clear();
-    iStartNode = m_iNumVertex;
+    std::set<int> vExploredNodesInt;
+    int iFinishNodeIndex = m_iNumVertex;
+    iStartNode = mNodeFinish.at(iFinishNodeIndex);
+    bool bIsNewSearch = true;
     do
     {
-        std::vector<DirectedEdge> vSCCEdges;
+        std::vector<std::shared_ptr<Edge>> vSCCEdges;
+        DirectedGraph graph;
         DFS(iStartNode, [&](std::shared_ptr<Edge> edge, int iCurrNode) -> bool
-        {
+        {//TODO: fix bug with adding incorrect edge on second iteration
             bool bIsAllowed = IsDirectPathAllowed(edge, iCurrNode);
+            if (bIsAllowed)
+            {
+                int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
+                auto itRet = vExploredNodesInt.insert(iExploringNode);
+                if (itRet.second)
+                {
+                    graph.AddEdge(edge.get()); // is it a good practice?
+                }
+            }
             return bIsAllowed;
-        });
+        }, bIsNewSearch);
+        m_vSCC.push_back(graph);
 
-    } while (iStartNode > 0);
+        auto itFind = std::end(vExploredNodesInt);
+        do
+        {
+            --iFinishNodeIndex;
+            auto itElement = mNodeFinish.find(iFinishNodeIndex);
+            if (itElement != std::end(mNodeFinish))
+            {
+                iStartNode = itElement->second;
+            }
+            else
+            {
+                break;
+            }
+            itFind = std::find(vExploredNodesInt.begin(), vExploredNodesInt.end(), iStartNode);
+        } while (itFind != std::end(vExploredNodesInt));
+        bIsNewSearch = false;
 
-
-    
+    } while (iFinishNodeIndex > 0);
 
 
     return m_vSCC;
-}
-
-//TODO: define allias for custom find_if
-bool DirectedGraph::IsNodeExplored(const std::set<NodeFinish> &vExploredNodes, int iNode) const
-{
-    auto itFind = std::find_if(vExploredNodes.begin(), vExploredNodes.end(), [iNode](const NodeFinish &node)->bool
-    {
-        return iNode == node.m_iNode;
-    });
-
-    return itFind != std::end(vExploredNodes);
 }
 
 //TODO: refactor this function
@@ -143,6 +165,16 @@ int DirectedGraph::CheckFinishTime(std::set<int> &vCloseVertexs, std::set<NodeFi
 
     vCloseVertexs.clear();
     return iProcessedOrder;
+}
+
+bool DirectedGraph::IsNodeExplored(const std::set<NodeFinish> &vExploredNodes, int iNode) const
+{
+    auto itFind = std::find_if(vExploredNodes.begin(), vExploredNodes.end(), [iNode](const NodeFinish &node)->bool
+    {
+        return iNode == node.m_iNode;
+    });
+
+    return itFind != std::end(vExploredNodes);
 }
 
 //TODO: there is a bug here
