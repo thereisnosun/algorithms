@@ -39,7 +39,7 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
         {
             bool bIsAllowed = IsReversePathAllowed(edge, iCurrNode);
 
-            int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
+            int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First(); //TODO: fis this one, based on direction
             if (iLeadNode != iExploringNode)
             {
                 NodeFinish processed(iLeadNode, iProcessedOrder);
@@ -94,9 +94,9 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
             bool bIsAllowed = IsDirectPathAllowed(edge, iCurrNode);
             if (bIsAllowed)
             {
-                int iExploringNode = edge->First() == iCurrNode ? edge->Second() : edge->First();
+                int iExploringNode = edge->Direction() == EdgeDirection::SECOND_TO_FIRST ? edge->First() : edge->Second();
                 auto itRet = vExploredNodesInt.insert(iExploringNode);
-                if (itRet.second)
+                if (itRet.second && !IsNodeInSCC(iCurrNode))
                 {
                     graph.AddEdge(edge.get()); // is it a good practice?
                 }
@@ -126,6 +126,17 @@ const std::vector<DirectedGraph>& DirectedGraph::ComputeSCC()
 
 
     return m_vSCC;
+}
+
+bool DirectedGraph::IsNodeInSCC(int iNode) const
+{
+    for (auto itCurr = m_vSCC.begin(); itCurr != m_vSCC.end(); ++itCurr)
+    {
+        if (itCurr->IsNodePresent(iNode))
+            return true;
+    }
+
+    return false;
 }
 
 //TODO: refactor this function

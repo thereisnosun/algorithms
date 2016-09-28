@@ -29,13 +29,7 @@ struct Node
     }
 };
 
-
-template <class Type>
-struct Result
-{
-    Type value;
-};
-
+//NOTE: m_iNumVertex not nessecary equals the biggest node in the graph
 class Graph
 {
 public:
@@ -48,6 +42,7 @@ public:
     void AddEdge(Edge *edge);
     void AddEdge(int iVert1, int iVert2); //this one breaks hierchy structure, what if it is called within DirectedWeightGraph ?
     void AddVertex(const std::vector<int> &vAdjency);
+    bool IsNodePresent(int iNode) const;
 public:
     //these should be "working horses" of the class, 
     //actual usage should be done by user routines which use them for common purposes

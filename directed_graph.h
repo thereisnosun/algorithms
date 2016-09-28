@@ -33,6 +33,7 @@ private:
     bool IsNodeExplored(const std::set<NodeFinish> &vExploredNodes, int iNode) const;
     bool IsDirectPathAllowed(std::shared_ptr<Edge> edge,/*node to which we are going*/int iCurrNode) const;
     bool IsReversePathAllowed(std::shared_ptr<Edge> edge,/*node to which we are going*/int iCurrNode) const;
+    bool IsNodeInSCC(int iNode) const;
 private:
     std::vector<DirectedGraph> m_vSCC;
 };

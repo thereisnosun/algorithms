@@ -187,6 +187,10 @@ void Graph::BFS(int iNode, std::function<void(int iNode1, int iNode2)> workFunc)
     }
 }
 
+bool Graph::IsNodePresent(int iNode) const
+{
+    return m_sVertex.find(iNode) != std::end(m_sVertex);
+}
 
 #include <iostream>
 
