@@ -30,6 +30,9 @@
     <ClCompile Include="directed_graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="directed_weight_graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="directed_graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="directed_weight_graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
