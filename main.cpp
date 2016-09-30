@@ -3,6 +3,7 @@
 #include "sort.h"
 #include "graph.h"
 #include "directed_graph.h"
+#include "directed_weight_graph.h"
 
 void MinimumCutTest();
 void MinimumPathTest();
@@ -11,7 +12,7 @@ void TopologicalOrderTest();
 void MergeSortTest();
 void QuickSortTest();
 void SCCTest();
-
+void DijkstraTest();
 
 int main(int argc, char *argv[])
 {
@@ -19,10 +20,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+void DijkstraTest()
+{
+    DirectedWeightGraph graph;
+    graph.AddEdge(new DirectedWeightEdge(1, 2, EdgeDirection::FIRST_TO_SECOND, 1));
+    graph.AddEdge(new DirectedWeightEdge(1, 3, EdgeDirection::FIRST_TO_SECOND, 4));
+    graph.AddEdge(new DirectedWeightEdge(2, 3, EdgeDirection::FIRST_TO_SECOND, 2));
+    graph.AddEdge(new DirectedWeightEdge(2, 4, EdgeDirection::FIRST_TO_SECOND, 6));
+    graph.AddEdge(new DirectedWeightEdge(3, 4, EdgeDirection::FIRST_TO_SECOND, 3));
+    auto dikstraPath = graph.FindShortestPath(1, 5);
+}
 
 void SCCTest()
 {
-#ifdef  _MSC_PLATFORM_TOOLSET_v140
     DirectedGraph directedGraph;
     directedGraph.AddEdge(new DirectedEdge(1, 7, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(1, 4, EdgeDirection::FIRST_TO_SECOND));
@@ -36,8 +46,7 @@ void SCCTest()
     directedGraph.AddEdge(new DirectedEdge(6, 8, EdgeDirection::SECOND_TO_FIRST));
     directedGraph.AddEdge(new DirectedEdge(6, 5, EdgeDirection::SECOND_TO_FIRST));
     auto compSCC = directedGraph.ComputeSCC();
-#else
-#endif
+
 }
 
 void TopologicalOrderTest()

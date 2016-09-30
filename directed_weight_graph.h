@@ -8,4 +8,5 @@ public:
     {
         m_GraphType = GraphType::DIRECTED_WEIGHT;
     }
+    std::shared_ptr<DirectedWeightGraph> FindShortestPath(int iNode1, int iNode2) const;
 };
