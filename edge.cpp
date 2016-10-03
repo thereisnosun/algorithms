@@ -5,6 +5,7 @@ Edge::Edge(int iOne, int iTwo)
     m_Edge.first = iOne;
     m_Edge.second = iTwo;
     m_direction = EdgeDirection::UNDIRECTED;
+    m_iWeight = 1;
 }
 
 /*
@@ -19,13 +20,23 @@ DirectedEdge::DirectedEdge(int iOne, int iTwo, const EdgeDirection &direction) :
 }
 
 WeightEdge::WeightEdge(int iOne, int iTwo, int iWeight) :
-    Edge(iOne, iTwo), m_iWeight(iWeight)
+    Edge(iOne, iTwo)
 {
-
+    m_iWeight = iWeight;
 }
 
 DirectedWeightEdge::DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &direction, int iWeight) :
     Edge(iOne, iTwo), DirectedEdge(iOne, iTwo, direction), WeightEdge(iOne, iTwo, iWeight)
 {
 
+}
+
+bool operator<(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2)
+{
+    return edge1.Weight() < edge2.Weight();
+}
+
+bool operator==(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2)
+{
+    return edge1.Weight() == edge2.Weight();
 }

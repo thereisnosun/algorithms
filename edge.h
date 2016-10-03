@@ -36,9 +36,9 @@ public:
     {
         return m_Edge.first == m_Edge.second;
     }
-    virtual int Weight() const //will be overriden in case of Weight graph
+    int Weight() const 
     {
-        return 1;
+        return m_iWeight;
     }
     virtual EdgeDirection Direction() const
     {
@@ -46,6 +46,7 @@ public:
     }
 protected:
     EdgeDirection m_direction;
+    int m_iWeight;
 private:
     std::pair<int, int> m_Edge;
 };
@@ -60,16 +61,13 @@ class WeightEdge: virtual  public Edge
 {
 public:
     WeightEdge(int iFirst, int iSecond, int iWeight);
-    int Weight() const override
-    {
-        return m_iWeight;
-    }
-private:
-    int m_iWeight;
+   
 };
 
 class DirectedWeightEdge: public DirectedEdge, public WeightEdge
 {
 public:
     DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &direction, int iWeight);
+    friend bool operator<(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2);
+    friend bool operator==(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2);
 };
