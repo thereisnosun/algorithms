@@ -44,6 +44,8 @@ public:
     {
         return m_direction;
     }
+    friend bool operator<(const Edge &edge1, const Edge &edge2);
+    friend bool operator==(const Edge &edge1, const Edge &edge2);
 protected:
     EdgeDirection m_direction;
     int m_iWeight;
@@ -68,6 +70,5 @@ class DirectedWeightEdge: public DirectedEdge, public WeightEdge
 {
 public:
     DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &direction, int iWeight);
-    friend bool operator<(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2);
-    friend bool operator==(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2);
+  
 };

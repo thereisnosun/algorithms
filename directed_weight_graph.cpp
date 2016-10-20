@@ -17,15 +17,6 @@ std::shared_ptr<DirectedWeightGraph> DirectedWeightGraph::FindShortestPath(int i
     vLocalEdges.reserve(m_vEdges.size());
     std::copy(m_vEdges.begin(), m_vEdges.end(), std::back_inserter(vLocalEdges));
 
-    std::make_heap(vLocalEdges.begin(), vLocalEdges.end());
-    std::sort_heap(vLocalEdges.begin(), vLocalEdges.end(),
-                   [](const std::shared_ptr<Edge> pEdge1, const std::shared_ptr<Edge> pEdge2) -> bool
-    {
-        return pEdge1->Weight() < pEdge2->Weight();
-    });
-   // std::sort_heap(vLocalEdges.begin(), vLocalEdges.end());
-
-
     auto itFind = std::find_if(vLocalEdges.begin(), vLocalEdges.end(), 
                                [&iNode1](const std::shared_ptr<Edge> pEdge) -> bool
     {
@@ -42,10 +33,25 @@ std::shared_ptr<DirectedWeightGraph> DirectedWeightGraph::FindShortestPath(int i
         return false;
     });
 
-    if (itFind != std::end(vLocalEdges))
+    if (itFind == std::end(vLocalEdges))
     {
         std::cout << "Edge is not present in the graph!\n";
+        return pPath;
     }
 
+
+    auto comparator = [](const std::shared_ptr<Edge> pEdge1, const std::shared_ptr<Edge> pEdge2) -> bool
+    {
+        return pEdge1->Weight() > pEdge2->Weight();
+    };
+
+    std::make_heap(vLocalEdges.begin(), vLocalEdges.end(), comparator);
+
+    std::pop_heap(vLocalEdges.begin(), vLocalEdges.end(), comparator);
+    auto edge = vLocalEdges.back();
+
+
+
+        
     return pPath;
 }

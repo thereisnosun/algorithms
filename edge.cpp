@@ -31,12 +31,12 @@ DirectedWeightEdge::DirectedWeightEdge(int iOne, int iTwo, const EdgeDirection &
 
 }
 
-bool operator<(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2)
+bool operator<(const Edge &edge1, const Edge &edge2)
 {
     return edge1.Weight() < edge2.Weight();
 }
 
-bool operator==(const DirectedWeightEdge &edge1, const DirectedWeightEdge &edge2)
+bool operator==(const Edge &edge1, const Edge &edge2)
 {
     return edge1.Weight() == edge2.Weight();
 }
