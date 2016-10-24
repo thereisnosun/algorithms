@@ -16,7 +16,8 @@ void DijkstraTest();
 
 int main(int argc, char *argv[])
 {
-    SCCTest();
+    //SCCTest();
+    DijkstraTest();
 	return 0;
 }
 
@@ -28,7 +29,7 @@ void DijkstraTest()
     graph.AddEdge(new DirectedWeightEdge(2, 3, EdgeDirection::FIRST_TO_SECOND, 2));
     graph.AddEdge(new DirectedWeightEdge(2, 4, EdgeDirection::FIRST_TO_SECOND, 6));
     graph.AddEdge(new DirectedWeightEdge(3, 4, EdgeDirection::FIRST_TO_SECOND, 3));
-    auto dikstraPath = graph.FindShortestPath(1, 5);
+    auto dikstraPath = graph.FindShortestPath(1, 4);
 }
 
 void SCCTest()

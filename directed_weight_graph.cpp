@@ -87,22 +87,11 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
 
     });
 
-    if (!bIsFirstNode && !bIsSecondNode)
+    if (!bIsFirstNode || !bIsSecondNode)
     {
         std::cout << "Edge is not present in the graph!\n";
         return std::move(shortestPath);
     }
-
-
-    //auto comparator = [](const std::shared_ptr<Edge> pEdge1, const std::shared_ptr<Edge> pEdge2) -> bool
-    //{
-    //    return pEdge1->Weight() > pEdge2->Weight();
-    //};
-
-    //std::make_heap(vLocalEdges.begin(), vLocalEdges.end(), comparator);
-
-    //std::pop_heap(vLocalEdges.begin(), vLocalEdges.end(), comparator);
-    //auto edge = vLocalEdges.back();
 
     //TODO: use dequeu instead of vector ?
     std::vector<PathWeight> vPaths;
@@ -120,21 +109,24 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
             if (pCurrEdge->First() == iCurrNode || pCurrEdge->Second() == iCurrNode)
             {
                 int iStartNode = pCurrEdge->First() == iCurrNode ? pCurrEdge->First() : pCurrEdge->Second();
-                int iLeadNode = pCurrEdge->First() == iStartNode ? pCurrEdge->Second() : pCurrEdge->First();
+                int iLeadNode = pCurrEdge->First() == iCurrNode ? pCurrEdge->Second() : pCurrEdge->First();
                 bool bIfPathExists = IfPathExists(iLeadNode, pCurrEdge);
                 if (bIfPathExists)
                 {
                     sUsedEdges.insert(pCurrEdge);
                     if (iCurrNode == iNode1)
                     {//first iteration, add all possible nodes
-                        PathWeight currWeight(iStartNode, pCurrEdge);
+                        PathWeight currWeight(iLeadNode, pCurrEdge);
                         vPaths.push_back(currWeight);
                     }
                     else
                     {
+                        std::make_heap(vPaths.begin(), vPaths.end());
                         std::pop_heap(vPaths.begin(), vPaths.end());
                         auto minPath = vPaths.back();
                         minPath.AddEdge(iLeadNode, pCurrEdge);
+                        int iLastIndex = vPaths.size() - 1;
+                        vPaths[iLastIndex] = minPath;
                     }
                 }
             }
