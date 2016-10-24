@@ -70,18 +70,24 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
     vLocalEdges.reserve(m_vEdges.size());
     std::copy(m_vEdges.begin(), m_vEdges.end(), std::back_inserter(vLocalEdges));
 
-    auto itFind = std::find_if(vLocalEdges.begin(), vLocalEdges.end(), 
-                               [&iNode1](const std::shared_ptr<Edge> pEdge) -> bool
+    bool bIsFirstNode = false;
+    bool bIsSecondNode = false;
+    std::for_each(vLocalEdges.begin(), vLocalEdges.end(), 
+                               [&](const std::shared_ptr<Edge> pEdge) -> bool
     {
-        if (pEdge->First() == iNode1 && pEdge->Second() == iNode1)
+        if (pEdge->First() == iNode1 || pEdge->Second() == iNode1)
         {
-            return true;
+            bIsFirstNode = true;
         }
 
-        return false;
+        if (pEdge->First() == iNode2 || pEdge->Second() == iNode2)
+        {
+            bIsSecondNode = true;
+        }
+
     });
 
-    if (itFind == std::end(vLocalEdges))
+    if (!bIsFirstNode && !bIsSecondNode)
     {
         std::cout << "Edge is not present in the graph!\n";
         return std::move(shortestPath);
