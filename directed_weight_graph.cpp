@@ -73,7 +73,7 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
     bool bIsFirstNode = false;
     bool bIsSecondNode = false;
     std::for_each(vLocalEdges.begin(), vLocalEdges.end(), 
-                               [&](const std::shared_ptr<Edge> pEdge) -> bool
+                               [&](const std::shared_ptr<Edge> pEdge) -> void
     {
         if (pEdge->First() == iNode1 || pEdge->Second() == iNode1)
         {
