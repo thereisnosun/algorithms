@@ -28,5 +28,4 @@ public:
     PathWeight FindShortestPath(int iNode1, int iNode2) const;
 private:
     bool IfPathExists(int iLeadNode, std::shared_ptr<Edge> pEdge) const;
-    int RegisterEdge(std::vector<PathWeight> &vPaths, const std::shared_ptr<Edge> &pCurrEdge, int iStartNode) const;
 };

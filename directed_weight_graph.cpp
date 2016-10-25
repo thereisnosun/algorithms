@@ -47,6 +47,8 @@ PathWeight& PathWeight::operator=(const PathWeight &&weight)
     m_iLeadNode = weight.m_iLeadNode;
     m_iTotalScore = weight.m_iTotalScore;
     m_vEdges = std::move(weight.m_vEdges);
+
+    return *this;
 }
 void PathWeight::AddEdge(int iLeadNode, std::shared_ptr<Edge> pEdge)
 {
@@ -158,32 +160,6 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
     return std::move(shortestPath);
 }
 
-int DirectedWeightGraph::RegisterEdge(std::vector<PathWeight> &vPaths, const std::shared_ptr<Edge> &pCurrEdge, int iStartNode) const
-{
-    int iCurrNode = 0;
-    int iLeadNode = pCurrEdge->First() == iStartNode ? pCurrEdge->Second() : pCurrEdge->First();
-    bool bIfPathExists = IfPathExists(iLeadNode, pCurrEdge);
-    if (bIfPathExists)
-    {
-        if (!vPaths.empty())
-        {
-            std::pop_heap(vPaths.begin(), vPaths.end());
-            auto minPath = vPaths.back();
-            iCurrNode = minPath.m_iLeadNode;
-            minPath.AddEdge(iStartNode, pCurrEdge);
-            //int iIndex = vPaths.size() - 1;
-            //vPaths[iIndex] = minPath;
-        }
-        else
-        {
-            PathWeight currWeight(iStartNode, pCurrEdge);
-            vPaths.push_back(currWeight);
-            iCurrNode = iLeadNode;
-        }
-    }
-
-    return iCurrNode;
-}
 
 bool DirectedWeightGraph::IfPathExists(int iLeadNode, std::shared_ptr<Edge> pEdge1) const
 {
