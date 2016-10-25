@@ -125,17 +125,34 @@ PathWeight DirectedWeightGraph::FindShortestPath(int iNode1, int iNode2) const
                         std::pop_heap(vPaths.begin(), vPaths.end());
                         auto minPath = vPaths.back();
                         minPath.AddEdge(iLeadNode, pCurrEdge);
-                        int iLastIndex = vPaths.size() - 1;
-                        vPaths[iLastIndex] = minPath;
+                        vPaths.push_back(minPath);
                     }
                 }
             }
 
         }
 
+        std::make_heap(vPaths.begin(), vPaths.end());
         std::pop_heap(vPaths.begin(), vPaths.end());
         auto minPath = vPaths.back();
-        iCurrNode = minPath.m_iLeadNode;
+        if (iCurrNode != iNode1)
+        {
+            while (minPath.m_iLeadNode == iCurrNode && !vPaths.empty())
+            {
+                vPaths.erase(vPaths.end() - 1);
+                std::make_heap(vPaths.begin(), vPaths.end());
+                std::pop_heap(vPaths.begin(), vPaths.end());
+                minPath = vPaths.back();
+            }
+            
+            iCurrNode = minPath.m_iLeadNode;
+            shortestPath = minPath;
+        }
+        else
+        {
+            iCurrNode = minPath.m_iLeadNode;
+        }
+        
     }
      
     return std::move(shortestPath);
