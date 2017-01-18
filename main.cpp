@@ -5,6 +5,8 @@
 #include "directed_graph.h"
 #include "directed_weight_graph.h"
 
+#include "best_practises.h"
+
 void MinimumCutTest();
 void MinimumPathTest();
 void TopologicalOrderTest();
@@ -16,36 +18,35 @@ void DijkstraTest();
 
 int main(int argc, char *argv[])
 {
-    //SCCTest();
-    DijkstraTest();
+    Item7ObjectConstrutc();
 	return 0;
 }
 
 void DijkstraTest()
 {
     DirectedWeightGraph graph;
-    graph.AddEdge(new DirectedWeightEdge(1, 2, EdgeDirection::FIRST_TO_SECOND, 1));
-    graph.AddEdge(new DirectedWeightEdge(1, 3, EdgeDirection::FIRST_TO_SECOND, 4));
-    graph.AddEdge(new DirectedWeightEdge(2, 3, EdgeDirection::FIRST_TO_SECOND, 2));
-    graph.AddEdge(new DirectedWeightEdge(2, 4, EdgeDirection::FIRST_TO_SECOND, 6));
-    graph.AddEdge(new DirectedWeightEdge(3, 4, EdgeDirection::FIRST_TO_SECOND, 3));
+    graph.AddEdge(new DirectedWeightEdge{ 1, 2, EdgeDirection::FIRST_TO_SECOND, 1 });
+    graph.AddEdge(new DirectedWeightEdge{ 1, 3, EdgeDirection::FIRST_TO_SECOND, 4 });
+    graph.AddEdge(new DirectedWeightEdge{ 2, 3, EdgeDirection::FIRST_TO_SECOND, 2 });
+    graph.AddEdge(new DirectedWeightEdge{ 2, 4, EdgeDirection::FIRST_TO_SECOND, 6 });
+    graph.AddEdge(new DirectedWeightEdge{3, 4, EdgeDirection::FIRST_TO_SECOND, 3});
     auto dikstraPath = graph.FindShortestPath(1, 4);
 }
 
 void SCCTest()
 {
     DirectedGraph directedGraph;
-    directedGraph.AddEdge(new DirectedEdge(1, 7, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(1, 4, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(4, 7, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(7, 9, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(9, 6, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(5, 9, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(8, 3, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(3, 2, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(2, 8, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(6, 8, EdgeDirection::SECOND_TO_FIRST));
-    directedGraph.AddEdge(new DirectedEdge(6, 5, EdgeDirection::SECOND_TO_FIRST));
+    directedGraph.AddEdge(new DirectedEdge{ 1, 7, EdgeDirection::SECOND_TO_FIRST });
+    directedGraph.AddEdge(new DirectedEdge{ 1, 4, EdgeDirection::FIRST_TO_SECOND });
+    directedGraph.AddEdge(new DirectedEdge{ 4, 7, EdgeDirection::FIRST_TO_SECOND });
+    directedGraph.AddEdge(new DirectedEdge{7, 9, EdgeDirection::SECOND_TO_FIRST});
+    directedGraph.AddEdge(new DirectedEdge{ 9, 6, EdgeDirection::SECOND_TO_FIRST });
+    directedGraph.AddEdge(new DirectedEdge{ 5, 9, EdgeDirection::SECOND_TO_FIRST });
+    directedGraph.AddEdge(new DirectedEdge{8, 3, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{3, 2, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{2, 8, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{ 6, 8, EdgeDirection::SECOND_TO_FIRST });
+    directedGraph.AddEdge(new DirectedEdge{ 6, 5, EdgeDirection::SECOND_TO_FIRST });
     auto compSCC = directedGraph.ComputeSCC();
 
 }
@@ -54,10 +55,10 @@ void TopologicalOrderTest()
 {
 #ifdef  _MSC_PLATFORM_TOOLSET_v140
     DirectedGraph directedGraph;
-    directedGraph.AddEdge(new DirectedEdge(1, 2, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(1, 3, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(2, 4, EdgeDirection::FIRST_TO_SECOND));
-    directedGraph.AddEdge(new DirectedEdge(3, 4, EdgeDirection::FIRST_TO_SECOND));
+    directedGraph.AddEdge(new DirectedEdge{1, 2, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{1, 3, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{2, 4, EdgeDirection::FIRST_TO_SECOND});
+    directedGraph.AddEdge(new DirectedEdge{3, 4, EdgeDirection::FIRST_TO_SECOND});
     auto topologicOrder = directedGraph.TopologicalOrder();
     Algo::PrintMap(topologicOrder);
 #else

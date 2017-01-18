@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="algorithms.cpp" />
+    <ClCompile Include="best_practices.cpp" />
     <ClCompile Include="directed_graph.cpp" />
     <ClCompile Include="directed_weight_graph.cpp" />
     <ClCompile Include="edge.cpp" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
+    <ClInclude Include="best_practises.h" />
     <ClInclude Include="directed_graph.h" />
     <ClInclude Include="directed_weight_graph.h" />
     <ClInclude Include="edge.h" />
