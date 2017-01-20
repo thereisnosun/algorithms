@@ -6,6 +6,7 @@
 #include "directed_weight_graph.h"
 
 #include "best_practises.h"
+#include "matrix.h"
 
 void MinimumCutTest();
 void MinimumPathTest();

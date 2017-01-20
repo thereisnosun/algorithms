@@ -161,6 +161,7 @@
     <ClInclude Include="directed_weight_graph.h" />
     <ClInclude Include="edge.h" />
     <ClInclude Include="graph.h" />
+    <ClInclude Include="matrix.h" />
     <ClInclude Include="sort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
