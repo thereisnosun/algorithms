@@ -18,7 +18,7 @@ void DijkstraTest();
 
 int main(int argc, char *argv[])
 {
-    Item7ObjectConstrutc();
+    Item9AliasDeclaration();
 	return 0;
 }
 

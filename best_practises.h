@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <initializer_list>
+#include <memory>
 
 class TestFeatures
 {
@@ -36,6 +37,29 @@ public:
     }
 };
 
+template <typename T>
+class TestAllocator 
+{ //TODO: implement
+public:
+    typedef T value_type;
+    TestAllocator(/*ctor args*/)
+    {
+
+    }
+    template <class U> TestAllocator(const TestAllocator<U>& other)
+    {
+
+    }
+    T* allocate(std::size_t n)
+    {
+        return new T;
+    };
+    void deallocate(T* p, std::size_t n)
+    {
+        //TODO: implement
+    }
+};
 
 
 void Item7ObjectConstrutc();
+void Item9AliasDeclaration();
