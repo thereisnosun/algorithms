@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms.h" />
+    <ClInclude Include="basics.h" />
     <ClInclude Include="best_practises.h" />
     <ClInclude Include="directed_graph.h" />
     <ClInclude Include="directed_weight_graph.h" />
