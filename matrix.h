@@ -1,8 +1,7 @@
 #pragma once
+#include "basics.h"
 #include <vector>
 
-template<bool B, typename T>
-using Enable_If = typename std::enable_if<B, T>::type;
 
 namespace teo
 {
