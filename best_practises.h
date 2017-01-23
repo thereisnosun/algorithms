@@ -32,9 +32,18 @@ public:
     }
     operator float() const
     {
-        std::cout << "TestFeatures::operator float() const called!";
+        std::cout << "TestFeatures::operator float() const called!\n";
         return 1.0;
     }
+    void DoWork() & //this function called only when *this is lvalue
+    {
+        std::cout << "TestFeatures::DoWork for l-value called!\n";
+    }
+    void DoWork() && // this function is called only when *this is an rvalue
+    {
+        std::cout << "TestFeatures::Dowrk for r-value called!\n";
+    }
+
 };
 
 template <typename T>

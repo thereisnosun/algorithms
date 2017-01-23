@@ -29,6 +29,60 @@ namespace teo
         size_t stride;
     };
 
+    template<typename List>
+    bool check_nonjagged(const List &list)
+    {
+        auto i = list.begin();
+        for (auto j = i + 1; J != list.end(); ++j)
+            if (i->size() != j->size())
+                return false;
+
+        return true;
+    }
+
+    template <typename T, typename Vec>
+    void insert_flag(std::initializer_list<T> list, Vec &vec)
+    {
+        add_list(list.begin(), list.end(), vec);
+    }
+
+    template<typename T, typename Vec>
+    void add_list(const std::initializer_list<T>* first, const std::initializer_list<T> *last, Vec &vec)
+    {
+        for (; first != last; ++first)
+            add_list(first->begin(), first->end(), vec);
+    }
+
+    template<typename T, typename Vec>
+    void add_list(const T *first, const T *second, Vec &vec)
+    {
+        vec.insert(vec.end(), first, last);
+    }
+
+    template<size_t N, typename I, typename List>
+    Enable_If < (N>1), void > add_extents(I &first, const List &list)
+    {
+        assert(check_non_jagged(list));
+        *first = list.size();
+        add_extents<N - 1>(++first, *list.begin());
+    }
+
+    template<size_t N, typename I, typename List>
+    Enable_If<(N == 1), void> add_extents(I &first, const List &list)
+    {
+        *first++ = list.size();
+    }
+
+    template <size_t N, typename List>
+    std::array<size_t, N> derive_extents(const List &list)
+    {
+        std::array<size_t, N> a;
+        auto f = a.begin();
+        add_extents<N>(f, list);
+        return a;
+    }
+
+
     template <size_t N>
     struct MatrixSlice
     {
@@ -62,20 +116,41 @@ namespace teo
     template<typename T, size_t N>
     class MatrixRef
     {
-
+    public:
+        MatrixRef(const MatrixSlice<N>& s, T *p) :desc{ s }, ptr{ p }
+        {
+        }
+    private:
+        MatrixSlice<N> desc;
+        T *p;
     };
 
+
+    
     template <typename T, size_t N>
     class MatrixInitializer
     {
-
+        //using type = std::initializer_list<typename MatrixInititializer<T, N - 1>::type>;
     };
+
+    template<typename T>
+    struct MatrixInitializer<T, 1>
+    {
+        using type = std::initializer_list<T>;
+    };
+
+    template<typename T>
+    struct MatrixInitializer<T, 0>;
 
     template <typename T, size_t N>
     class MatrixImpl
     {
 
     };
+/*
+    template<typename T, size_t N>
+    using MatrixInitializer = typename MatrixImpl::MatrixInit<T, N>::type;*/
+
 
     template<typename T, size_t N>
     class Matrix
