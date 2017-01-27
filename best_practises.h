@@ -72,3 +72,29 @@ public:
 
 void Item7ObjectConstrutc();
 void Item9AliasDeclaration();
+ 
+template <typename Container, typename Value>
+void FindAndInsert(Container &cont, Value &valFind, Value &valIns)
+{
+    using std::cbegin;
+    using std::cend;
+
+    auto itFind = std::find(cbegind(cont), cend(cont), valFind);
+    container.insert(itFind, valIns);
+}
+
+constexpr
+int pow(int base, int exp) noexcept
+{
+    return (exp == 0 ? 1 : base * pow(base, exp - 1));
+}
+
+class ConstructSharedFrom : public std::enable_shared_from_this<ConstructSharedFrom>
+{
+public:
+    void Construct()
+    {
+        //std::shared now can be constructed from *this pointer
+        shared_from_this();
+    }
+};
