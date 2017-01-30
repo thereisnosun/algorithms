@@ -72,6 +72,8 @@ public:
 
 void Item7ObjectConstrutc();
 void Item9AliasDeclaration();
+void Item20WeakPtr();
+void Item21CreateSmartPtr();
  
 template <typename Container, typename Value>
 void FindAndInsert(Container &cont, Value &valFind, Value &valIns)
@@ -96,5 +98,26 @@ public:
     {
         //std::shared now can be constructed from *this pointer
         shared_from_this();
+    }
+};
+
+
+//The Curiously Recurring Template Pattern
+template <typename T>
+class Base
+{
+public:
+    void Interface()
+    {
+        static_cast<*T>(this)->Function1();
+    }
+};
+
+class Derived : public Base<Derived>
+{
+public: 
+    void Function1()
+    {
+        std::cout << "Derived::Function1 is called!\n";
     }
 };

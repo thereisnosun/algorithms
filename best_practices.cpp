@@ -47,6 +47,62 @@ void Item9AliasDeclaration()
 
     MyAllocVector<int> vVectorAlloc;
     MyAllocVectorDef<int>::type vVectorAllocDef;
-    
-    
+
+}
+
+void Item20WeakPtr()
+{
+    auto pSharedFeature = std::make_shared<TestFeatures>();
+
+    std::weak_ptr<TestFeatures> pWeakFeatures{ pSharedFeature };
+
+    pSharedFeature = nullptr;
+
+    if (pWeakFeatures.expired())
+    {
+        std::cout << "Pointer to TestFeatures has expired\n";
+    }
+    else
+    {
+        std::cout << "Pointer to TestFeatures still alive\n";
+        auto pNewShared = pWeakFeatures.lock();
+        if (pNewShared == nullptr)
+        {
+            std::cout << "Pointer is not valid!\n";
+        }
+        else
+        {
+            std::cout << "Pointer is valid!\n";
+        }
+    }
+
+    try
+    {
+        std::shared_ptr<TestFeatures> pNewShared { pWeakFeatures };
+    }
+    catch (std::bad_weak_ptr &exception)
+    {
+        std::cout << "Bad weak_ptr exception is catched!\n";
+    }
+}
+
+int someFunc()
+{
+    //may throw an exception
+    return 1;
+}
+
+void TestFunc(std::shared_ptr<TestFeatures> pTest, int i)
+{
+
+}
+
+void Item21CreateSmartPtr()
+{
+    TestFunc(std::shared_ptr<TestFeatures>{new TestFeatures}, someFunc()); // unsafe, potetial memory leak
+
+    TestFunc(std::make_shared<TestFeatures>(), someFunc()); // this one is safe
+
+
+
 }
