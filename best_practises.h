@@ -121,3 +121,15 @@ public:
         std::cout << "Derived::Function1 is called!\n";
     }
 };
+
+template <class T>
+struct IsPointer
+{
+    enum { value = false };
+};
+
+template <class T>
+struct IsPointer<T*>
+{
+    enum { value = true };
+};
