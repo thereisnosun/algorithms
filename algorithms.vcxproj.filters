@@ -65,5 +65,11 @@
     <ClInclude Include="basics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="linked_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="general_algos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <unordered_set>
 
 struct NodeLL
 {
@@ -11,29 +12,29 @@ class LinkedList
 {
 public:
     LinkedList() :
-        start(nullptr)
+        m_start(nullptr)
     {
 
     }
     void insertToEnd(int value)
     {
-        if (!start)
+        if (!m_start)
         {
-            start = new NodeLL;
-            start->value = value;
-            start->next = nullptr;
+            m_start = new NodeLL;
+            m_start->value = value;
+            m_start->next = nullptr;
             return;
         }
 
-        if (!start->next)
+        if (!m_start->next)
         {
-            start->next = new NodeLL;
-            start->next->value = value;
-            start->next->next = nullptr;
+            m_start->next = new NodeLL;
+            m_start->next->value = value;
+            m_start->next->next = nullptr;
             return;
         }
 
-        NodeLL* current = start;
+        NodeLL* current = m_start;
         while (current->next)
         {
             current = current->next;
@@ -46,14 +47,13 @@ public:
 
     void deleteNode(int value)
     {
-        if (!start)
+        if (!m_start)
             return;
 
-
-        if (start->value == value)
+        if (m_start->value == value)
         {
-            NodeLL* deleteNode = start;
-            start = start->next;
+            NodeLL* deleteNode = m_start;
+            m_start = m_start->next;
 
             delete deleteNode;
             deleteNode = nullptr;
@@ -61,8 +61,8 @@ public:
             return;
        }
 
-        NodeLL* current = start;
-        NodeLL* prev = start;
+        NodeLL* current = m_start;
+        NodeLL* prev = m_start;
         while (current)
         {
             if (current->value == value)
@@ -78,22 +78,52 @@ public:
         }
     }
 
+	void createLoop()
+	{
+		NodeLL* iterator = m_start;
+		while (iterator->next)
+		{
+			iterator = iterator->next;
+		}
+		iterator->next = m_start;
+	}
+
+	bool detectAndRemoveLoop()
+	{
+		std::unordered_set<NodeLL*> visitedNodes;
+		NodeLL* iterator = m_start;
+		NodeLL* prevIt = m_start;
+		while (iterator)
+		{
+			auto isExist = !visitedNodes.insert(iterator).second;
+			if (isExist)
+			{
+				prevIt->next = nullptr;
+				return true;
+			}
+			prevIt = iterator;
+			iterator = iterator->next;
+
+		}
+		return false;
+	}
+
     void reverse()
     {
-        if (!start)
+        if (!m_start)
             return;
 
         NodeLL* prevNode = nullptr;
-        NodeLL* nextNode = start;
+        NodeLL* nextNode = m_start;
         while (nextNode)
         {
-            nextNode = start->next;
-            start->next = prevNode;
-            prevNode = start;
-            start = nextNode;
+            nextNode = m_start->next;
+            m_start->next = prevNode;
+            prevNode = m_start;
+            m_start = nextNode;
         }
 
-        start = prevNode;
+        m_start = prevNode;
     }
 
     void reverseRecursive(NodeLL** start)
@@ -117,17 +147,17 @@ public:
 
     void findMiddle()
     {
-        if (!start)
+        if (!m_start)
             return;
 
-        if (!start->next)
+        if (!m_start->next)
         {
-            std::cout << "Middle is - " << start->value << std::endl;
+            std::cout << "Middle is - " << m_start->value << std::endl;
             return;
         }
 
-        NodeLL* slowPtr = start;
-        NodeLL* fastPtr = start;
+        NodeLL* slowPtr = m_start;
+        NodeLL* fastPtr = m_start;
         while (fastPtr && fastPtr->next)
         {
             slowPtr = slowPtr->next;
@@ -137,17 +167,12 @@ public:
 
     }
 
-    bool detectAndRemoveLoop()
-    {
-        return true;
-    }
-
     void printLL()
     {
-        if (!start)
+        if (!m_start)
             return;
 
-        NodeLL* current = start;
+        NodeLL* current = m_start;
         while (current)
         {
             std::cout << current->value << " ";
@@ -156,6 +181,6 @@ public:
         std::cout << "\n";
     }
 //private:
-    NodeLL* start;
+    NodeLL* m_start;
 };
 

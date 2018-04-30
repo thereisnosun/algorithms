@@ -9,9 +9,9 @@ struct PathWeight
     PathWeight();
     PathWeight(int iLeadNode, std::shared_ptr<Edge> pEdge);
     PathWeight(const PathWeight &weight);
-    PathWeight(const PathWeight &&weight);
+    PathWeight(PathWeight &&weight);
     PathWeight& operator =(const PathWeight &weight);
-    PathWeight& operator =(const PathWeight &&weight);
+    PathWeight& operator =(PathWeight &&weight);
     void AddEdge(int iLeadNode, std::shared_ptr<Edge> pEdge);
     friend bool operator <(const PathWeight &weight1, const PathWeight &weight2);
 };

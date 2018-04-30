@@ -21,7 +21,7 @@ PathWeight::PathWeight(const PathWeight &weight)
     m_vEdges.reserve(weight.m_vEdges.size());
     std::copy(weight.m_vEdges.begin(), weight.m_vEdges.end(), std::back_inserter(m_vEdges));
 }
-PathWeight::PathWeight(const PathWeight &&weight)
+PathWeight::PathWeight(PathWeight &&weight)
 {
     m_iLeadNode = weight.m_iLeadNode;
     m_iTotalScore = weight.m_iTotalScore;
@@ -39,7 +39,7 @@ PathWeight& PathWeight::operator=(const PathWeight &weight)
     std::copy(weight.m_vEdges.begin(), weight.m_vEdges.end(), std::back_inserter(m_vEdges));
     return *this;
 }
-PathWeight& PathWeight::operator=(const PathWeight &&weight)
+PathWeight& PathWeight::operator=(PathWeight &&weight)
 {
     if (this == &weight)
         return *this;

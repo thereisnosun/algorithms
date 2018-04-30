@@ -4,6 +4,8 @@
 #include "graph.h"
 #include "directed_graph.h"
 #include "directed_weight_graph.h"
+#include "linked_list.h"
+#include "general_algos.h"
 
 #include "best_practises.h"
 #include "matrix.h"
@@ -17,8 +19,44 @@ void QuickSortTest();
 void SCCTest();
 void DijkstraTest();
 
+
+//lets assume it is null turminated
+//void reverseStr(char* str, size_t index, size_t size)
+//{
+//	//size_t index = 0;
+//	//if (str[index] < size)
+//	//	return;
+//	
+//	
+//	char prev = *str;
+//	//++str;
+//	++index;
+//	reverseStr(str, index, size);
+//	char tmp = *str;
+//	//*str = prev;
+//	std::cout << prev << " ";
+//	//prev
+//}
+
+void LL_LoopTest()
+{
+	LinkedList list;
+	list.insertToEnd(1);
+	list.insertToEnd(2);
+	list.insertToEnd(3);
+	list.createLoop();
+	std::cout << "Loop existence - " << list.detectAndRemoveLoop() << std::endl;
+}
+
+
+
 int main(int argc, char *argv[])
 {
+	//LL_LoopTest();
+	std::cout << string::checkIfPalindrome("ROCK") << std::endl;
+	std::cout << string::checkIfPalindrome("ROOR") << std::endl;
+
+//	reverseStr("ROCK");
     Item9AliasDeclaration();
 	return 0;
 }
