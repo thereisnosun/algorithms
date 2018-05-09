@@ -21,22 +21,35 @@ void DijkstraTest();
 
 
 //lets assume it is null turminated
-//void reverseStr(char* str, size_t index, size_t size)
-//{
-//	//size_t index = 0;
-//	//if (str[index] < size)
-//	//	return;
-//	
-//	
-//	char prev = *str;
-//	//++str;
-//	++index;
-//	reverseStr(str, index, size);
-//	char tmp = *str;
-//	//*str = prev;
-//	std::cout << prev << " ";
-//	//prev
-//}
+void reverseStr(char* str, size_t index, size_t size)
+{
+	//size_t index = 0;
+	//if (str[index] < size)
+	//	return;
+	
+	
+	char prev = *str;
+	//++str;
+	++index;
+	reverseStr(str, index, size);
+	char tmp = *str;
+	//*str = prev;
+	std::cout << prev << " ";
+	//prev
+}
+
+std::string reverseStringRecursively(std::string str) 
+{
+	if (str.length() == 1) 
+	{
+		return str;
+	}
+	else 
+	{
+		return reverseStringRecursively(str.substr(1, str.length())) + str.at(0);
+	}
+}
+
 
 void LL_LoopTest()
 {
@@ -48,15 +61,33 @@ void LL_LoopTest()
 	std::cout << "Loop existence - " << list.detectAndRemoveLoop() << std::endl;
 }
 
+#include "trie_str.h"
+void Trie_Test()
+{
+	std::string keys[] = { "the", "a", "there",
+		"answer", "any", "by",
+		"bye", "their" };
+
+	int n = sizeof(keys) / sizeof(keys[0]);
+
+	TrieNode trie;
+	for (int i = 0; i < n; ++i)
+		trie.insert(keys[i]);
+
+	std::cout << "Exists 'any' - " << trie.search("any") << std::endl;
+	std::cout << "Exists 'rupert' - " << trie.search("rupert") << std::endl;
+}
 
 
 int main(int argc, char *argv[])
 {
+	Trie_Test();
 	//LL_LoopTest();
-	std::cout << string::checkIfPalindrome("ROCK") << std::endl;
-	std::cout << string::checkIfPalindrome("ROOR") << std::endl;
+	//std::cout << string::checkIfPalindrome("ROCK") << std::endl;
+	//std::cout << string::checkIfPalindrome("ROOR") << std::endl;
 
-//	reverseStr("ROCK");
+	std::string reversed = reverseStringRecursively("ROCK");
+	std::cout << "Reversed string is - " << reversed << std::endl;
     Item9AliasDeclaration();
 	return 0;
 }
