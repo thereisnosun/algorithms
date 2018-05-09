@@ -81,7 +81,10 @@ void Trie_Test()
 
 int main(int argc, char *argv[])
 {
-	Trie_Test();
+	std::cout << string::isInterleave("XY", "X", "XXY") << std::endl;
+	std::cout << string::isInterleave("YX", "X", "XXY") << std::endl;
+
+	//Trie_Test();
 	//LL_LoopTest();
 	//std::cout << string::checkIfPalindrome("ROCK") << std::endl;
 	//std::cout << string::checkIfPalindrome("ROOR") << std::endl;
