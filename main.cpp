@@ -81,8 +81,13 @@ void Trie_Test()
 
 int main(int argc, char *argv[])
 {
-	std::cout << string::isInterleave("XY", "X", "XXY") << std::endl;
-	std::cout << string::isInterleave("YX", "X", "XXY") << std::endl;
+	/*std::cout << string::isInterleave("XY", "X", "XXY") << std::endl;
+	std::cout << string::isInterleave("YX", "X", "XXY") << std::endl;*/
+
+	std::cout << bits::diffBitSumsNaive({ 1,3, 5 }) << std::endl;
+	std::cout << bits::diffBitSumsLinear({ 1,3, 5 }) << std::endl;
+
+	//string::getNumericAbreviations("KAK");
 
 	//Trie_Test();
 	//LL_LoopTest();
