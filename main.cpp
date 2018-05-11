@@ -79,10 +79,35 @@ void Trie_Test()
 }
 
 
+void treeTest()
+{
+	tree::treeNode  *root = tree::createNode(1);
+
+	root->left = tree::createNode(2);
+	root->right = tree::createNode(3);
+	root->left->left = tree::createNode(4);
+	root->left->right = tree::createNode(5);
+
+	std::cout << tree::findDepth(root) << std::endl;
+
+	std::cout << tree::checkIfBST(root) << std::endl;
+
+	tree::treeNode  *rootBST = tree::createNode(5);
+	rootBST->left = tree::createNode(2);
+	rootBST->right = tree::createNode(6);
+	rootBST->left->left = tree::createNode(1);
+	rootBST->left->right = tree::createNode(3);
+	std::cout << tree::checkIfBST(rootBST) << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
 	/*std::cout << string::isInterleave("XY", "X", "XXY") << std::endl;
 	std::cout << string::isInterleave("YX", "X", "XXY") << std::endl;*/
+
+	std::cout << "Longest is - " << string::findLongestSubStr("aabbbbbcc", 2) << std::endl;
+	//treeTest();
+	return 0;
 
 	std::cout << bits::diffBitSumsNaive({ 1,3, 5 }) << std::endl;
 	std::cout << bits::diffBitSumsLinear({ 1,3, 5 }) << std::endl;

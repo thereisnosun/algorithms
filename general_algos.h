@@ -82,8 +82,45 @@ namespace string
 		getNumericAbreviationsWorker(example, 0, example.length(), st);
 	}
 
+	//k is a number of unique symbols
+	std::string findLongestSubStr(const std::string& strSource, int k)
+	{
+		std::unordered_set<char> uniqueSymbols;
+		std::string longest;
+		longest.reserve(strSource.size());
+		std::string current;
+		size_t currentUnique = 0;
+		for (char symbol : strSource)
+		{
+			if (uniqueSymbols.find(symbol) == std::end(uniqueSymbols))
+			{
+				++currentUnique;
+			}
 
-	
+			
+			if (currentUnique > k)
+			{
+				if (current.size() >= longest.size())
+					longest = current;
+				current.clear();
+				currentUnique = 0;
+				uniqueSymbols.clear();
+			}
+			else
+			{
+				current += symbol;
+				uniqueSymbols.insert(symbol);
+			}
+			
+		}
+
+		if (current.size() > longest.size())
+			longest = current;
+
+		return longest;
+
+
+	}
 }
 
 namespace bits
@@ -151,4 +188,65 @@ namespace bits
 
 		return ans;
 	}
+}
+
+namespace tree
+{
+	struct treeNode
+	{
+		int value;
+		treeNode* left;
+		treeNode* right;
+	};
+
+	treeNode* createNode(int value)
+	{
+		treeNode* node = new treeNode;
+		node->value = value;
+		node->left = nullptr;
+		node->right = nullptr;
+
+		return node;
+	}
+
+	int findDepth(treeNode* head)
+	{
+		if (!head)
+			return 0;
+
+		int left = findDepth(head->left);
+
+		int right = findDepth(head->right);
+
+		return (std::max(left, right) + 1);
+	}
+
+
+	bool checkIfBST(treeNode* head)
+	{
+		if (!head)
+			return false;
+
+		if (head->left)
+		{
+			if (head->left->value > head->value)
+				return false;
+
+			return checkIfBST(head->left);
+		}
+		if (head->right)
+		{
+			if (head->right->value < head->value)
+				return false;
+
+			return checkIfBST(head->right);
+		}
+
+		return true;
+	
+	}
+
+	
+
+
 }
