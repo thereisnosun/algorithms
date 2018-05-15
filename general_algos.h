@@ -91,13 +91,12 @@ namespace string
 		std::string current;
 		size_t currentUnique = 0;
 		for (char symbol : strSource)
-		{
+		{ // there is a bug, it is incorrect
 			if (uniqueSymbols.find(symbol) == std::end(uniqueSymbols))
 			{
 				++currentUnique;
 			}
 
-			
 			if (currentUnique > k)
 			{
 				if (current.size() >= longest.size())
@@ -209,6 +208,16 @@ namespace tree
 		return node;
 	}
 
+	void printTree(treeNode* head)
+	{
+		if (!head)
+			return;
+
+		std::cout << "Value=" << head->value << " ";
+		printTree(head->left);
+		printTree(head->right);
+	}
+
 	int findDepth(treeNode* head)
 	{
 		if (!head)
@@ -244,6 +253,25 @@ namespace tree
 
 		return true;
 	
+	}
+
+
+	int countNodesWithSum(treeNode* node, int sum, int& count)
+	{
+		if (node)
+			return 0;
+
+		int res = countNodesWithSum(node->left, sum, count) + countNodesWithSum(node->right, sum, count) + node->value;
+		if (res == sum)
+			++count;
+
+		return count;
+	}
+	/* This functions prints the subnode with given sum*/
+	void findNodesWithSum(treeNode* node, int sum)
+	{
+		int count = 0;
+		std::cout << countNodesWithSum(node, sum, count) << std::endl;
 	}
 
 	
